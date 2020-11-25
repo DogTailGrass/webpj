@@ -1,8 +1,11 @@
 <template>
 <div>
-    <el-button type="success" round>
+    <el-button type="success" round @click.native="dialogVisible=true">
       修改个人信息
     </el-button>
+    <el-dialog title="个人信息" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
+      <PersonalInformation @child-envent='handledialogdata'></PersonalInformation>
+    </el-dialog>
     <br></br>
     <fever></fever>
     <br></br>
@@ -33,10 +36,12 @@
     import risk from '@/components/risk'
     import inquarantine from '@/components/inquarantine'
     import contantpatient from '@/components/contantpatient'
+    import PersonalInformation from './personal-information.vue'
     export default {
     data() {
       return {
-        issubmited:false
+        issubmited:false,
+        dialogVisible:false
       };
     },
     created(){
@@ -94,9 +99,18 @@
             return 0;
           }
           return 1;
+        },
+        handledialogdata(obj){
+          this.dialogVisible = false;
+          if(obj.data === true){
+            console.log(true);
+          }
+            
+          else
+            console.log(false);
         }
     },
-    components: { place,fever,inschool,temperature,cough,risk,inquarantine,contantpatient }
+    components: { place,fever,inschool,temperature,cough,risk,inquarantine,contantpatient,PersonalInformation }
   }
 
 </script>

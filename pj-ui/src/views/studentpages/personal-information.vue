@@ -11,6 +11,10 @@
         <el-input v-model="form.phonenumber"></el-input>
       </el-form-item>
     </el-form>
+     <span slot="footer" class="dialog-footer">
+        <el-button @click="handledialogcancel">取 消</el-button>
+        <el-button type="primary" @click="handledialogconfim">确 定</el-button>
+    </span>
 </div>
 </template>
 <script>
@@ -27,7 +31,19 @@
     created(){
       
     },
-    methods: {        
+    methods: {    
+      handledialogcancel(){
+        let obj = new Object();
+        obj.form = this.form;
+        obj.data = false;
+        this.$emit('child-envent',obj);
+      },
+      handledialogconfim(){
+        let obj = new Object();
+        obj.form = this.form;
+        obj.data = true;
+        this.$emit('child-envent',obj);
+      }    
     },
     components: {  }
   }

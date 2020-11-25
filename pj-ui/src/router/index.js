@@ -1,23 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/views/login'
+import StudentLogin from '@/views/login/studentlogin'
+import AdminLogin from '@/views/login/adminlogin'
 import StudentReport from '@/views/studentpages'
 import Pieview from '@/views/adminpages'
 import PersonalInfo from '@/views/studentpages/personal-information'
+import LayOut from '@/layout/layout'
+import AppMain from '@/layout/appmain'
+import Navi from '@/components/navi/navi'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'login',   //路由名称
-      component: Login //组件对象
+      path: '/studentlogin',
+      name: 'studentlogin',   //路由名称
+      component: StudentLogin //组件对象
     },
     {
-      path: '/login',
-      name: 'login',   //路由名称
-      component: Login //组件对象
+      path: '/adminlogin',
+      name: 'adminlogin',   //路由名称
+      component: AdminLogin //组件对象
     },
     {
       path: '/studentreport',

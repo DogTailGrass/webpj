@@ -6,6 +6,7 @@ import router from './router'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import echarts from 'echarts'
+import Navi from './components/navi/navi.vue'
 Vue.prototype.$echarts = echarts 
 Vue.use(Element)
 
@@ -15,6 +16,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  render: h => h(Navi)
+  //components: { App },
+  //template: '<App/>'
 })
