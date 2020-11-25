@@ -36,7 +36,7 @@
     import risk from '@/components/risk'
     import inquarantine from '@/components/inquarantine'
     import contantpatient from '@/components/contantpatient'
-    import PersonalInformation from './personal-information.vue'
+    import PersonalInformation from './personalinfo'
     export default {
     data() {
       return {

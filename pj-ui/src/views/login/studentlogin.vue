@@ -60,7 +60,7 @@ export default {
                     localStorage.setItem("zz-mms-token", res.data.token);
                     sessionStorage.setItem("username", this.form.username);
                     // 前往首页
-                    this.$router.push("/studentreport");
+                    this.$router.push("/studenthomepage");
                 } 
                 else {
                   // 使用elementui的消息提示
@@ -83,7 +83,7 @@ export default {
             .catch(() => {
               console.log("failed");
               sessionStorage.setItem("username", this.form.username);
-              this.$router.push("/studentreport");
+              this.$router.push("/studenthomepage");
             });
         } 
         else {
