@@ -33,6 +33,9 @@
     },
     methods: {    
       handledialogcancel(){
+        this.form.personalname = '';
+        this.form.addr = '';
+        this.form.phonenumber = '';
         let obj = new Object();
         obj.form = this.form;
         obj.data = false;

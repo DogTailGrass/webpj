@@ -6,12 +6,19 @@ import StudentReport from '@/views/studentpages/report'
 import Pieview from '@/views/adminpages'
 import PersonalInfo from '@/views/studentpages/personalinfo'
 import StudentHomePage from '@/views/studentpages/homepage'
+import AdminHomePage from '@/views/adminpages/homepage'
+import Entrance from '@/views/login/entrance'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/',
+      name: 'entrance',   //路由名称
+      component: Entrance //组件对象
+    },
     {
       path: '/studentlogin',
       name: 'studentlogin',   //路由名称
@@ -21,12 +28,6 @@ export default new Router({
       path: '/adminlogin',
       name: 'adminlogin',   //路由名称
       component: AdminLogin //组件对象
-    },
-    
-    {
-      path: '/pieview',
-      name: 'pieview',   //路由名称
-      component: Pieview //组件对象
     },
     {
       path: '/personal-info',
@@ -47,6 +48,33 @@ export default new Router({
           path: 'personalinfo',
           name: 'personalinfo',
           component: () => import ('@/views/studentpages/personalinfo.vue')
+        },
+        {
+          path: 'viewannouncement',
+          name: 'viewannouncement',
+          component: () => import ('@/views/studentpages/announcement.vue')
+        }
+      ]
+    },
+    {
+      path: '/adminhomepage',
+      name: 'adminhomepage',   //路由名称
+      component: AdminHomePage,
+      children: [
+        {
+          path: 'index',
+          name: 'index',
+          component: () => import ('@/views/adminpages/index.vue')
+        },
+        {
+          path: 'analyze',
+          name: 'analyze',
+          component: () => import ('@/views/adminpages/analyze.vue')
+        },
+        {
+          path: 'publishannounce',
+          name: 'publishannounce',
+          component: () => import ('@/views/adminpages/announce.vue')
         }
       ]
     }

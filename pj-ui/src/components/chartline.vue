@@ -2,7 +2,7 @@
   <div>
     <br></br>
     <br></br>
-    <div id="chartLineBox" style="float:left;width: 100%;height: 70vh;"> </div>
+    <div id="chartLineBox" style="float:left;width: 70%;height: 50vh;"> </div>
   </div>
 </template>
 

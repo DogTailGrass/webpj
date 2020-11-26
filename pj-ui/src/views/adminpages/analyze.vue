@@ -1,9 +1,12 @@
 <template>
   <div>
+    <Pie 
+      :ComponentData='piedata'>
+    </Pie>
     <div>
-    <Form
-      :ComponentData='tableData'>
-    </Form>
+    <ChartLine 
+      :ComponentData='chartlinedata'>
+    </ChartLine>
     </div>
   </div>
 </template>
@@ -19,7 +22,6 @@ require('echarts/lib/component/title')
 import {getuserinfo} from '@/api/getinfo'
 import ChartLine from '@/components/chartline'
 import Pie from '@/components/pie'
-import Form from '@/components/notsubmitedform'
 export default {
   data() {
     return {
@@ -74,7 +76,7 @@ export default {
       console.log(this.nowDate);
     }
   },
-  components: { ChartLine,Pie,Form }
+  components: { ChartLine,Pie }
 }
 </script>
 

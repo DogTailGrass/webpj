@@ -2,12 +2,12 @@
     <div style="background-color: #EBEBEB;min-height:800px">
         <div style="width:100%;background-color: #636363; overflow: hidden">
             <span class="demonstration" style="float:left;padding-top:10px;color:white;margin-left:1%">
-                学生系统
+                管理员系统
             </span>
             <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link" style="color:white">
-                    个人中心
+                    admin
                   <i class="el-icon-caret-bottom el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
@@ -23,14 +23,14 @@
                 <el-col :xs="4" :sm="4" :md="4" :lg="4">
                     <div>
                         <el-menu default-active="1" class="el-menu-vertical-demo" style="min-height:800px" @select="handleSelect">
-                            <router-link to="/studenthomepage/studentreport">
-                                <el-menu-item index="1"><i class="el-icon-message"></i>每日信息上报</el-menu-item>
+                            <router-link to="/adminhomepage/index">
+                                <el-menu-item index="1"><i class="el-icon-message"></i>查看未上报人员名单</el-menu-item>
                             </router-link>
-                            <router-link to="/studenthomepage/personalinfo">
-                                <el-menu-item index="2"><i class="el-icon-menu"></i>个人信息修改</el-menu-item>
+                            <router-link to="/adminhomepage/analyze">
+                                <el-menu-item index="2"><i class="el-icon-menu"></i>数据分析</el-menu-item>
                             </router-link>
-                            <router-link to="/studenthomepage/viewannouncement">
-                                <el-menu-item index="3"><i class="el-icon-setting"></i>查看公告</el-menu-item>
+                            <router-link to="/adminhomepage/publishannounce">
+                                <el-menu-item index="3"><i class="el-icon-setting"></i>发布公告</el-menu-item>
                             </router-link>
                             
                         </el-menu>
@@ -69,13 +69,13 @@
                 switch(key){
                     case '1':
                         //this.$router.push('/studentreport');
-                        this.breadcrumbItems  = ['每日信息上报']
+                        this.breadcrumbItems  = ['查看未上报人员名单']
                         break;
                     case '2':
-                        this.breadcrumbItems  = ['个人信息修改']
+                        this.breadcrumbItems  = ['数据分析']
                         break;
                     case '3':
-                        this.breadcrumbItems  = ['查看公告']
+                        this.breadcrumbItems  = ['发布公告']
                         break;
                 }
             },

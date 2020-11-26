@@ -1,10 +1,11 @@
 <template>
 <div>
-    <el-button type="success" round @click.native="dialogVisible=true">
-      修改个人信息
-    </el-button>
-    <el-dialog title="个人信息" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
-      <PersonalInformation @child-envent='handledialogdata'></PersonalInformation>
+    <el-dialog title="备注" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
+      <el-input v-model="comment" type="textarea" :rows="15" placeholder="请输入内容"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click.native="handledialogcancel">取 消</el-button>
+        <el-button type="primary" @click.native="handledialogconfim">确 定</el-button>
+      </span>
     </el-dialog>
     <br></br>
     <fever></fever>
@@ -20,6 +21,10 @@
     <inquarantine></inquarantine>
     <br></br>
     <contantpatient></contantpatient>    
+    <br></br>
+    <el-button type="success" round @click.native="dialogVisible=true">
+      备注
+    </el-button>
     <br></br>
     <el-button type="success" round :disabled="issubmited" @click.native="handlesubmit">
       提交
@@ -41,7 +46,8 @@
     data() {
       return {
         issubmited:false,
-        dialogVisible:false
+        dialogVisible:false,
+        comment:''
       };
     },
     created(){
@@ -100,14 +106,14 @@
           }
           return 1;
         },
-        handledialogdata(obj){
+        handledialogcancel(){
           this.dialogVisible = false;
-          if(obj.data === true){
-            console.log(true);
-          }
-            
-          else
-            console.log(false);
+          console.log(this.comment);
+          this.comment = '';
+        },
+        handledialogconfim(){
+          this.dialogVisible = false;
+          console.log(this.comment);
         }
     },
     components: { place,fever,inschool,temperature,cough,risk,inquarantine,contantpatient,PersonalInformation }
