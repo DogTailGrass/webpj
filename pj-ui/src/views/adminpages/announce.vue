@@ -8,6 +8,7 @@
 </div>
 </template>
 <script>
+import {pushannouncement} from '@/api/adminapi/pushannouncement'
     export default {
     data() {
       return {
@@ -22,7 +23,17 @@
         this.announce = '';
       },
       handledialogconfim(){
-        
+        pushannouncement(sessionStorage.getItem("user-token",this.announce)).then(response => {
+        const res = response.data;
+        if(res.flag){
+          console.log("success");
+        }
+      })
+      .catch(() => {
+        localStorage.setItem("announce",this.announce);
+        console.log("fail");
+        alert("发布成功");
+      });
       }    
     },
     components: {  }

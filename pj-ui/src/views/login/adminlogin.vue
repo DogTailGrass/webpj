@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import {login, getUserInfo} from '@/api/login'
+import {adminlogin, getAdminInfo} from '@/api/adminapi/login'
 export default {
   data() {
     return {
@@ -41,35 +41,37 @@ export default {
         this.$refs[formName].validate(valid => {
         //console.log(valid)
         if (valid) {
-            login(this.form.username, this.form.password).then(response => {
+            adminlogin(this.form.username, this.form.password).then(response => {
             console.log(valid);
             const res = response.data;
             console.log(res, res.flag, res.data.token, res.message);
             if (res.flag) {
               // 验证成功，通过token获取用户信息
-                getUserInfo(res.data.token).then(response => {
-                const resUser = response.data;
-                if (resUser.flag) {
-                    //获取到了用户信息
-                    console.log("userInfo", resUser.data);
-                    //保存token和用户信息
-                    localStorage.setItem(
-                    "zz-mms-user",
-                    JSON.stringify(resUser.data)
-                    );
-                    localStorage.setItem("zz-mms-token", res.data.token);
+              getAdminInfo(res.data.token).then(response => {
+                const res = response.data;
+                if (res.flag) {
+                // 验证成功，通过token获取用户信息
+                  getStudentInfo(res.token).then(response => {
+                  const resUser = response.data;
+                  if (resUser.flag) {
+                  //获取用户信息并保存
+                    sessionStorage.setItem("user-token", res.data.token);
+                    sessionStorage.setItem("useraddr",resUser.addr);
+                    sessionStorage.setItem("userphone",resUser.phone);
                     sessionStorage.setItem("username", this.form.username);
-                    // 前往首页
-                    this.$router.push("/pieview");
-                } 
-                else {
+                  // 前往首页
+                  this.$router.push("/adminhomepage");
+                  } 
+                  else {
                   // 使用elementui的消息提示
                     this.$message({
-                    message: resUser.message,
-                    type: "warning"
+                      message: resUser.message,
+                      type: "warning"
                     });
+                  }
+                 });
                 }
-                });
+              })
             }
             else {
                 // 未通过，弹出警告
@@ -82,8 +84,9 @@ export default {
             })
             .catch(() => {
               console.log("failed");
-              sessionStorage.setItem("username", this.form.username);
-              this.$router.push("/pieview");
+              //打桩
+              sessionStorage.setItem("user-token", "admin");
+              this.$router.push("/adminhomepage");
             });
         } 
         else {

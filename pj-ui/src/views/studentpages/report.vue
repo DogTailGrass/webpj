@@ -32,7 +32,7 @@
 </div>
 </template>
 <script>
-    import {inforeport} from '@/api/report'
+    import {inforeport} from '@/api/studentapi/pushreport'
     import place from '@/components/place'
     import fever from '@/components/fever'
     import inschool from '@/components/inschool'
@@ -69,32 +69,30 @@
           }
           else
           {
-            alert("提交成功");
-            sessionStorage.setItem("issubmited",true);
-            this.issubmited = true;
-            console.log(sessionStorage.getItem("username"));
-            console.log(sessionStorage.getItem("isfever"));
-            console.log(sessionStorage.getItem("isinschool"));
-            console.log(sessionStorage.getItem("iscontantpatient"));
-            console.log(sessionStorage.getItem("iscough"));
-            console.log(sessionStorage.getItem("isinquarantine"));
-            console.log(sessionStorage.getItem("isinrisk"));
-            console.log(sessionStorage.getItem("temperature"));
-            inforeport(sessionStorage.getItem("username"),
-                sessionStorage.getItem("isfever"),
-                sessionStorage.getItem("isinschool"),
-                sessionStorage.getItem("iscontantpatient"),
-                sessionStorage.getItem("iscough"),
-                sessionStorage.getItem("isinquarantine"),
-                sessionStorage.getItem("isinrisk"),
-                sessionStorage.getItem("temperature")).then(response => {
+            let report={};
+            report.isfever = sessionStorage.getItem("isfever");
+            report.isinschool = sessionStorage.getItem("isinschool");
+            report.iscontantpatient = sessionStorage.getItem("iscontantpatient");
+            report.iscough = sessionStorage.getItem("iscough");
+            report.isinquarantine = sessionStorage.getItem("isinquarantine");
+            report.isinrisk = sessionStorage.getItem("isinrisk");
+            report.temperature = sessionStorage.getItem("temperature");
+            report.comment = this.comment;
+            inforeport(sessionStorage.getItem("user-token"),
+                report).then(response => {
                   const res = response.data;
-                  console.log(res, res.flag, res.data.token, res.message);
+                  if(res.flag){
+                    alert("提交成功");
+                    sessionStorage.setItem("issubmited",true);
+                    this.issubmited = true;
+                  }
+                  //console.log(res, res.flag, res.data.token, res.message);
                   })
             .catch(() => {
               console.log("failed");
-              this.issubmited = false;
-               this.$router.push("/pieview");
+              alert("提交失败");
+              //sessionStorage.setItem("issubmited",true);
+              //this.issubmited = true;
             });
           }
           

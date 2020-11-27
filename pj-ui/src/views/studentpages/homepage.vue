@@ -57,7 +57,7 @@
         data(){
             return {
                 searchCriteria: '',
-                breadcrumbItems: ['欢迎'],
+                breadcrumbItems: [''],
             }
         },
 

@@ -18,6 +18,7 @@
 </div>
 </template>
 <script>
+import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
     export default {
     data() {
       return {
@@ -29,23 +30,39 @@
       };
     },
     created(){
-      
+      this.form.personalname = sessionStorage.getItem("username");
+      this.form.addr = sessionStorage.getItem("useraddr");
+      this.form.phonenumber = sessionStorage.getItem("userphone");
     },
     methods: {    
       handledialogcancel(){
-        this.form.personalname = '';
-        this.form.addr = '';
-        this.form.phonenumber = '';
-        let obj = new Object();
-        obj.form = this.form;
-        obj.data = false;
-        this.$emit('child-envent',obj);
+        this.form.personalname = sessionStorage.getItem("username");
+        this.form.addr = sessionStorage.getItem("useraddr");
+        this.form.phonenumber = sessionStorage.getItem("userphone");
       },
       handledialogconfim(){
-        let obj = new Object();
-        obj.form = this.form;
-        obj.data = true;
-        this.$emit('child-envent',obj);
+        let personalinfo={};
+        personalinfo.name = this.form.personalname;
+        personalinfo.addr = this.form.addr;
+        personalinfo.phonenumber = this.form.phonenumber;
+        pushpersonalinfo(sessionStorage.getItem("user-token"),personalinfo).then(response => {
+            const res = response.data;
+            if(res.flag){
+              alert("提交成功");
+              sessionStorage.setItem("username",this.form.personalname);
+              sessionStorage.setItem("useraddr",this.form.addr);
+              sessionStorage.setItem("userphone",this.form.phonenumber);
+            }
+            //console.log(res, res.flag, res.data.token, res.message);
+            })
+            .catch(() => {
+              console.log("failed");
+              alert("提交失败");
+              //打桩
+              sessionStorage.setItem("username",this.form.personalname);
+              sessionStorage.setItem("useraddr",this.form.addr);
+              sessionStorage.setItem("userphone",this.form.phonenumber);
+            });
       }    
     },
     components: {  }

@@ -1,12 +1,12 @@
-import request from '../utils/request'
+import request from '@/utils/request'
 
 
 // 导出的是普通成员函数
 
 // 登录
-export function login(username,password){
+export function adminlogin(username,password){
     return request({
-        url: '/user/login',
+        url: '/user/adminlogin',
         method: 'post',
         data: {
             username:username,
@@ -16,9 +16,9 @@ export function login(username,password){
 }
 
 // 获取用户信息
-export function getUserInfo(token){
+export function getAdminInfo(token){
     return request({
-        url: `/user/info/${token}`, // 反单引号，动态获取token值
+        url: `/user/admininfo/${token}`, // 反单引号，动态获取token值
         method: 'get'
     })
 }
