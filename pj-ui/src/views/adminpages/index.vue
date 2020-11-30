@@ -16,45 +16,51 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 
 
-import {getuserinfo} from '@/api/getinfo'
-import ChartLine from '@/components/chartline'
-import Pie from '@/components/pie'
+import {getReportInfo} from '@/api/adminapi/getreportinfo'
 import Form from '@/components/notsubmitedform'
 export default {
   data() {
     return {
       nowDate: '',
-      tableData: [],
-      chartlinedata:[],
-      piedata:{
-        hassubmited:55,
-        notsubmited:15
-      }     
+      tableData: []
     };
   },
   created(){
-    
       this.getcurrentData();
   },
   mounted(){
-    //this.getcurrentData();
+    let date = new Date();
+    let year = date.getFullYear(); // 年
+    let month = date.getMonth() + 1; // 月
+    let day = date.getDate(); // 日
+    this.nowDate = `${year}/${month}/${day}`;
+    console.log(this.nowDate);
   },
   methods:{
     getcurrentData() {
-      getuserinfo().then(response => {
-        const res = response.data;
-        console.log(res, res.flag, res.data.token, res.message);
+      getReportInfo(localStorage.getItem("user-token")).then(response => {
+        let res = response.data;
+        for(let i = 0;i<res.form.num;i++)
+        {
+          this.tableData[i] = new Object();
+          this.tableData[i].date = this.nowDate;
+          this.tableData[i].name = res.form.formdata[i].name;
+          this.tableData[i].number = res.form.formdata[i].number;
+        }
       })
       .catch(() => {
         console.log("failed");
-        //this.issubmited = false;
-        //this.$router.push("/pieview");
+        //打桩
+        let res = response.data;
+        for(let i = 0;i<res.form.num;i++)
+        {
+          this.tableData[i] = new Object();
+          this.tableData[i].date = this.nowDate;
+          this.tableData[i].name = res.form.formdata[i].name;
+          this.tableData[i].number = res.form.formdata[i].number;
+        }
+
       });
-      let date = new Date();
-      let year = date.getFullYear(); // 年
-      let month = date.getMonth() + 1; // 月
-      let day = date.getDate(); // 日
-      this.nowDate = `${year}/${month}/${day}`;
       let num = 20;
       for(let i = 0;i<num;i++)
       {
@@ -63,18 +69,11 @@ export default {
         this.tableData[i].name = '郑海关';
         this.tableData[i].number = '20262010061';
       }
-      this.chartlinedata[0] = 10;
-      this.chartlinedata[1] = 20;
-      this.chartlinedata[2] = 30;
-      this.chartlinedata[3] = 15;
-      this.chartlinedata[4] = 18;
-      this.chartlinedata[5] = 50;
-      this.chartlinedata[6] = 20;
       
-      console.log(this.nowDate);
+      
     }
   },
-  components: { ChartLine,Pie,Form }
+  components: { Form }
 }
 </script>
 

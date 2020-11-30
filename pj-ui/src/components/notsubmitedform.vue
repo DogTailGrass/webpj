@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import {getuserinfo} from '@/api/getinfo'
 export default {
     props:{
         ComponentData:{
