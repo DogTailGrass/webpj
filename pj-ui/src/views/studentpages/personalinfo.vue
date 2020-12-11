@@ -4,6 +4,18 @@
       <el-form-item label="姓名" prop="personalname">
         <el-input v-model="form.personalname"></el-input>
       </el-form-item>
+      <el-form-item label="院系" prop="school">
+        <el-input v-model="form.school"></el-input>
+      </el-form-item>
+      <el-form-item label="分类" prop="category">
+        <el-input v-model="form.category"></el-input>
+      </el-form-item>
+      <el-form-item label="类型" prop="type">
+        <el-input v-model="form.type"></el-input>
+      </el-form-item>
+      <el-form-item label="辅导员姓名" prop="teacher_name">
+        <el-input v-model="form.teacher_name"></el-input>
+      </el-form-item>
       <el-form-item label="现居住地址" prop="addr">
         <el-input v-model="form.addr"></el-input>
       </el-form-item>
@@ -24,6 +36,9 @@ import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
       return {
         form: {
         personalname: '',
+        school:'软件工程',
+        category:'研究生',
+        type:'非全日制',
         addr: '',
         phonenumber:''
         }

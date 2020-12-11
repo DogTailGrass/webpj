@@ -11,6 +11,7 @@
 
       <el-form-item>
         <el-button type="primary" @click="submitForm('form')">登录</el-button>
+        <el-button @click="showregisterview()">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -89,7 +90,11 @@ export default {
             return false;
         }
     });
+       },
+       showregisterview(){
+         this.$router.push("/studentregister");
        }
+
   }
 };
 </script>

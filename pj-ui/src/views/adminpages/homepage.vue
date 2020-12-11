@@ -24,13 +24,22 @@
                     <div>
                         <el-menu default-active="1" class="el-menu-vertical-demo" style="min-height:800px" @select="handleSelect">
                             <router-link to="/adminhomepage/index">
-                                <el-menu-item index="1"><i class="el-icon-message"></i>查看未上报人员名单</el-menu-item>
+                                <el-menu-item index="1"><i class="el-icon-message"></i>上报确认</el-menu-item>
                             </router-link>
                             <router-link to="/adminhomepage/analyze">
                                 <el-menu-item index="2"><i class="el-icon-menu"></i>数据分析</el-menu-item>
                             </router-link>
                             <router-link to="/adminhomepage/publishannounce">
                                 <el-menu-item index="3"><i class="el-icon-setting"></i>发布公告</el-menu-item>
+                            </router-link>
+                            <router-link to="/adminhomepage/publishannounce">
+                                <el-menu-item index="4"><i class="el-icon-setting"></i>公告显示</el-menu-item>
+                            </router-link>
+                            <router-link to="/adminhomepage/publishannounce">
+                                <el-menu-item index="5"><i class="el-icon-setting"></i>重置密码</el-menu-item>
+                            </router-link>
+                            <router-link to="/adminhomepage/publishannounce">
+                                <el-menu-item index="6"><i class="el-icon-setting"></i>重置学生密码</el-menu-item>
                             </router-link>
                             
                         </el-menu>
@@ -57,8 +66,12 @@
         data(){
             return {
                 searchCriteria: '',
-                breadcrumbItems: ['欢迎'],
+                breadcrumbItems: ['查看未上报人员名单'],
             }
+        },
+
+        created(){
+            this.$router.push('/adminhomepage/index');
         },
 
         methods:{
@@ -69,7 +82,7 @@
                 switch(key){
                     case '1':
                         //this.$router.push('/studentreport');
-                        this.breadcrumbItems  = ['查看未上报人员名单']
+                        this.breadcrumbItems  = ['上报确认']
                         break;
                     case '2':
                         this.breadcrumbItems  = ['数据分析']
