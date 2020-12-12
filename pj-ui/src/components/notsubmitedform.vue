@@ -5,7 +5,7 @@
     <br>
     </div>
     <el-table
-      :data="ComponentData"
+      :data="FormComponentData"
       style="width: 100%">
       <el-table-column
         prop="date"
@@ -26,10 +26,9 @@
 </template>
 
 <script>
-import {getuserinfo} from '@/api/getinfo'
 export default {
     props:{
-        ComponentData:{
+        FormComponentData:{
             type: Array,
             default: function() {
             }
@@ -41,6 +40,8 @@ export default {
     };
   },
   created(){
+    console.log("表格子组件");
+    console.log(this.FormComponentData);
   },
   mounted(){
   },
