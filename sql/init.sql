@@ -112,11 +112,14 @@ insert into fdu_notice values (100, current_date(), current_time(), '公告 1', 
 insert into fdu_notice values (101, current_date(), current_time(), '公告 2', '这是第2条公告', 1, sysdate(), 'admin', sysdate(), 'admin');
 insert into fdu_notice values (102, current_date(), current_time(), '公告 3', '这是第3条公告', 1, sysdate(), 'admin', sysdate(), 'admin');
 
--- 检测数据
+-- 检测初始化数据数据
 select '******************* fdu_user_basic 表  ***************' ;
 select * from fdu_user_basic;
-select '******************* fdu_user_basic 表  ***************' ;
+select '******************* fdu_user_info 表  ***************' ;
 select * from fdu_user_info;
+select '******************* fdu_user_other 表  ***************' ;
 select * from fdu_user_other;
+select '******************* fdu_daily_update 表  ***************' ;
 select * from fdu_daily_update;
+select '******************* fdu_notice 表  ***************' ;
 select * from fdu_notice;
