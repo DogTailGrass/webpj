@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import StudentLogin from '@/views/login/studentlogin'
-import StudentRegister from '@/views/login/studentregister'
 import AdminLogin from '@/views/login/adminlogin'
 import StudentReport from '@/views/studentpages/report'
 import Pieview from '@/views/adminpages'
@@ -24,11 +23,6 @@ export default new Router({
       path: '/studentlogin',
       name: 'studentlogin',   //路由名称
       component: StudentLogin //组件对象
-    },
-    {
-      path: '/studentregister',
-      name: 'studentregister',   //路由名称
-      component: StudentRegister //组件对象
     },
     {
       path: '/adminlogin',
@@ -59,11 +53,6 @@ export default new Router({
           path: 'viewannouncement',
           name: 'viewannouncement',
           component: () => import ('@/views/studentpages/announcement.vue')
-        },
-        {
-          path: 'changepassword',
-          name: 'changepassword',
-          component: () => import ('@/views/studentpages/changepassword.vue')
         }
       ]
     },

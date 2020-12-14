@@ -42,6 +42,3 @@ nbdist/
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
-
-# mac
-.DS_Store

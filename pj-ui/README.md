@@ -19,10 +19,3 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-
-npm uninstall -g vue-cli
-npm install -g @vue/cli
-npm install echarts --save
-npm i -S axios
-npm i element-ui -S
-npm install --save vue-router
