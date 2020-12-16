@@ -25,8 +25,7 @@ CREATE TABLE `fdu_daily_update` (
 DROP TABLE `fdu_notice`;
 CREATE TABLE `fdu_notice` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `notice_date` date DEFAULT NULL COMMENT '发布日期',
-  `notice_time` time DEFAULT NULL COMMENT '发布时间',
+  `notice_time` datetime DEFAULT NULL COMMENT '发布时间',
   `title` varchar(100) DEFAULT NULL COMMENT '公告标题',
   `content` varchar(400) DEFAULT NULL COMMENT '公告内容',
   `status` char(1) DEFAULT NULL COMMENT '显示状态（0隐藏 1显示）',
