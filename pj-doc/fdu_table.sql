@@ -1,8 +1,10 @@
 DROP TABLE `fdu_daily_update`;
 CREATE TABLE `fdu_daily_update` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `upd_date` date NOT NULL COMMENT '上报日期',
   `user_id` varchar(20) NOT NULL COMMENT '用户ID（学号）',
   `on_campus` char(1) DEFAULT NULL COMMENT '是否在校（0否 1是）',
+  `reason` varchar(128) DEFAULT NULL COMMENT '返校原因',
   `current_area` char(1) DEFAULT NULL COMMENT '所在区域（1-5）',
   `current_dist` varchar(128) DEFAULT NULL COMMENT '所在地点',
   `temperature` char(1) DEFAULT NULL COMMENT '体温范围（1-3）',
@@ -16,7 +18,7 @@ CREATE TABLE `fdu_daily_update` (
   `create_by` varchar(20) DEFAULT NULL COMMENT '创建者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `update_by` varchar(20) DEFAULT NULL COMMENT '更新者',
-  PRIMARY KEY (`upd_date`,`user_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ;
 
