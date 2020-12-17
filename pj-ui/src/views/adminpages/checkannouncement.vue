@@ -4,9 +4,10 @@
     :data="tableData"
     border
     :fit='true' 
+    :row-class-name="tableRowClassName"
     style="width: 100%">
     <el-table-column
-      prop="index"
+      prop="idx"
       label="序号"
       width="50">
     </el-table-column>
@@ -29,7 +30,8 @@
       label="操作"
       width="100">
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+        <el-button @click="handleClick(scope.row)" type="text" size="medium">查看</el-button>
+        <el-button @click="handledelete(scope.row)" type="text" size="medium">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -54,15 +56,25 @@ import {get_all_announcement} from '@/api/studentapi/getannouncement'
       };
     },
     created(){
+      function add0(m){return m<10?'0'+m:m }
       get_all_announcement(sessionStorage.getItem("user-id")).then(response => {
-        const res = response.data;
-        if(res.flag){
+        if(response.flag){
+          let res = response.data;
+          for(let i = 5;i<res;i++)
+          {
+            tempdata[i] = new Object();
+            tempdata[i].idx = i+1;
+            tempdata[i].title="紧急调查2";
+            tempdata[i].publishdate = nowDate;
+            tempdata[i].publishtime = time;
+            tempdata[i].announcement="一行白鹭上青天";
+          }
+        this.tableData = tempdata;
           this.announce = res.announce;
         }
       })
       .catch(() => {
-        let tempdata  = [];
-        let date = new Date();
+        let date = new Date(1608264000000);
         let year = date.getFullYear(); // 年
         let month = date.getMonth() + 1; // 月
         let day = date.getDate(); // 日
@@ -70,11 +82,14 @@ import {get_all_announcement} from '@/api/studentapi/getannouncement'
         let min = date.getMinutes();
         let sec = date.getSeconds();
         let nowDate = `${year}/${month}/${day}`;
-        let time =`${hour}:${min}:${sec}`;
+        //let time =`${hour}:${min}:${sec}`;
+        let time = add0(hour) + ':' + add0(min) + ':' + add0(sec);
+        
+        let tempdata  = [];
         for(let i = 0;i<5;i++)
         {
           tempdata[i] = new Object();
-          tempdata[i].index = i + 1;
+          tempdata[i].idx = i+1;
           tempdata[i].title="紧急调查1";
           tempdata[i].publishdate = nowDate;
           tempdata[i].publishtime = time;
@@ -83,24 +98,38 @@ import {get_all_announcement} from '@/api/studentapi/getannouncement'
         for(let i = 5;i<10;i++)
         {
           tempdata[i] = new Object();
-          tempdata[i].index = i + 1;
+          tempdata[i].idx = i+1;
           tempdata[i].title="紧急调查2";
           tempdata[i].publishdate = nowDate;
           tempdata[i].publishtime = time;
           tempdata[i].announcement="一行白鹭上青天";
         }
         this.tableData = tempdata;
-        console.log("fail");
+
+        
       });
     },
     methods:{
-
+        tableRowClassName({row, rowIndex}) {
+            row.row_index = rowIndex + 1;
+        },
       handleClick(row){
-        console.log(row.index);
+        console.log(row.row_index);
         this.dialogVisible = true;
-        let idx = row.index;
+        let idx = row.row_index - 1;
         this.announcement = this.tableData[idx].announcement;
-
+      },
+      handledelete(row){
+        //删除一列数据
+        let length = this.tableData.length;
+        this.tableData.splice(row.row_index - 1,1);
+        for(let i = row.row_index-1;i<length-1;i++)
+        {
+            console.log(this.tableData[i]);
+            this.tableData[i].idx = i +1;
+        }
+        
+        alert("删除成功");
       },
       handledialogconfim(){
         this.dialogVisible = false;

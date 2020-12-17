@@ -1,13 +1,24 @@
 import request from '@/utils/request'
 
 //信息上报
-export function getannouncement(user_token)
+export function get_newest_announcement(user_id)
 {
     return request({
-        url: '/user/getannouncement',
+        url: '/user/get_newest_announcement',
         method: 'post',
         data:{
-            token:user_token
+            user_id:user_id
+        }
+    })
+}
+
+export function get_all_announcement(user_id)
+{
+    return request({
+        url: '/user/get_all_announcement',
+        method: 'post',
+        data:{
+            user_id:user_id
         }
     })
 }

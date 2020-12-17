@@ -13,7 +13,7 @@ import Entrance from '@/views/login/entrance'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path: '/',
@@ -64,18 +64,24 @@ export default new Router({
           path: 'changepassword',
           name: 'changepassword',
           component: () => import ('@/views/studentpages/changepassword.vue')
+        },
+        {
+          path: 'firstpage',
+          name: 'firstpage',
+          component: () => import ('@/views/studentpages/firstpage.vue')
         }
       ]
     },
     {
       path: '/adminhomepage',
       name: 'adminhomepage',   //路由名称
+      //redirect:'index',      //设置默认路由
       component: AdminHomePage,
       children: [
         {
-          path: 'index',
-          name: 'index',
-          component: () => import ('@/views/adminpages/index.vue')
+          path: 'reportconfirm',
+          name: 'reportconfirm',
+          component: () => import ('@/views/adminpages/reportconfirm.vue')
         },
         {
           path: 'analyze',
@@ -86,6 +92,21 @@ export default new Router({
           path: 'publishannounce',
           name: 'publishannounce',
           component: () => import ('@/views/adminpages/announce.vue')
+        },
+        {
+          path: 'checkannounce',
+          name: 'checkannounce',
+          component: () => import ('@/views/adminpages/checkannouncement.vue')
+        },
+        {
+          path: 'resetpassword',
+          name: 'resetpassword',
+          component: () => import ('@/views/adminpages/resetpassword.vue')
+        },
+        {
+          path: 'resetstudentpassword',
+          name: 'resetstudentpassword',
+          component: () => import ('@/views/adminpages/resetstudentpassword.vue')
         }
       ]
     }

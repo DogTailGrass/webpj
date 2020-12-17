@@ -1,11 +1,8 @@
 <template>
   <div>
-    <div class = "li">
-    <li>未上报人员名单</li>
-    <br>
-    </div>
     <el-table
-      :data="FormComponentData"
+      :data="ComponentData"
+      height="250"
       style="width: 100%">
       <el-table-column
         prop="date"
@@ -28,7 +25,7 @@
 <script>
 export default {
     props:{
-        FormComponentData:{
+        ComponentData:{
             type: Array,
             default: function() {
             }
@@ -40,8 +37,8 @@ export default {
     };
   },
   created(){
-    console.log("表格子组件");
-    console.log(this.FormComponentData);
+    //console.log("表格子组件");
+    //console.log(this.ComponentData);
   },
   mounted(){
   },

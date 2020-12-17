@@ -14,14 +14,15 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 
 export default {
-    props:{
-        ComponentData:{
-            type: Array,
-            default: function() {
-            return [0, 0, 0, 0, 0, 0, 0]
-            }
-        }
-    },
+  props:['ComponentData'],
+    //props:{
+    //    ComponentData:{
+    //        type: Array,
+    //        default: function() {
+    //        return [0, 0, 0, 0, 0, 0, 0]
+    //        }
+    //    }
+    //},
   data() {
     return {
     };
@@ -38,15 +39,15 @@ export default {
  
       // 指定图表的配置项和数据
       let option = {
-        title : {
-            text: '近一周未上报人数变化趋势',//主标题
-            textStyle: {
-                color: '#989898',
-                fontStyle: 'normal',
-                fontWeight: 'normal',
-                fontSize: 20
-            }
-        },
+        //title : {
+        //    text: '近一周未上报人数变化趋势',//主标题
+        //    textStyle: {
+        //        color: '#989898',
+        //        fontStyle: 'normal',
+        //        fontWeight: 'normal',
+        //        fontSize: 15
+        //    }
+        //},
 
         tooltip: {              //设置tip提示
             trigger: 'axis'
@@ -66,7 +67,7 @@ export default {
           nameTextStyle: {        //坐标轴名称的文字样式
               color: '#FA6F53',
               fontSize: 16,
-              padding: [0, 0, 0, 20]
+              padding: [0, 0, 0, 15]
           },
           axisLine: {             //坐标轴轴线相关设置。
               lineStyle: {
@@ -78,7 +79,7 @@ export default {
           name: '人数',
           nameTextStyle: {
               color: '#FA6F53',
-              fontSize: 16,
+              fontSize: 15,
               padding: [0, 0, 10, 0]
           },
           axisLine: {
@@ -104,6 +105,11 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.chartLine.setOption(option);
     }
-  }
+  },
+  watch: {
+    ComponentData(newValue, oldValue) {
+        this.drawchartline();
+      }
+  },
 }
 </script>

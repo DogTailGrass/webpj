@@ -5,6 +5,7 @@
       :ComponentData='tableData'>
     </Form>
     </div>
+    <el-button type="primary" @click="exportdate()">表格导出</el-button>
   </div>
 </template>
 
@@ -14,7 +15,7 @@ let echarts = require('echarts/lib/echarts')
 // 引入提示框和title组件
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
-
+import { export2Excel } from '@/utils/excel.js'
 
 import {getReportInfo} from '@/api/adminapi/getreportinfo'
 import Form from '@/components/notsubmitedform'
@@ -22,7 +23,8 @@ export default {
   data() {
     return {
       nowDate: '',
-      tableData: []
+      tableData: [],
+      columns:[{title:'日期',key:'date'},{title:'姓名',key:'name'},{title:'学工号',key:'number'}]
     };
   },
   created(){
@@ -51,26 +53,24 @@ export default {
       .catch(() => {
         console.log("failed");
         //打桩
-        let res = response.data;
-        for(let i = 0;i<res.form.num;i++)
+       
+        let num = 10;
+        let tempdata  = [];
+        for(let i = 0;i<num;i++)
         {
-          this.tableData[i] = new Object();
-          this.tableData[i].date = this.nowDate;
-          this.tableData[i].name = res.form.formdata[i].name;
-          this.tableData[i].number = res.form.formdata[i].number;
+          tempdata[i] = new Object();
+          tempdata[i].date = this.nowDate;
+          tempdata[i].name = '郑海关';
+          tempdata[i].number = '20262010061';
         }
+        this.tableData = tempdata;
 
       });
-      let num = 20;
-      for(let i = 0;i<num;i++)
-      {
-        this.tableData[i] = new Object();
-        this.tableData[i].date = this.nowDate;
-        this.tableData[i].name = '郑海关';
-        this.tableData[i].number = '20262010061';
-      }
-      
-      
+    },
+    exportdate(){
+      console.log("expertdate");
+        export2Excel(this.columns,this.tableData);
+
     }
   },
   components: { Form }

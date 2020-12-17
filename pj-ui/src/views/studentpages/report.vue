@@ -29,6 +29,14 @@
     <el-button type="success" round :disabled="issubmited" @click.native="handlesubmit">
       提交
     </el-button>
+    <li>今日是否发烧</li>
+    <el-radio v-model="is_fever" label="0">否</el-radio>
+    <el-radio v-model="is_fever" label="1">是</el-radio>
+    <br></br>
+    <li>今日是否咳嗽</li>
+    <el-radio v-model="is_cough" label="0">否</el-radio>
+    <el-radio v-model="is_cough" label="1">是</el-radio>
+
 </div>
 </template>
 <script>
@@ -47,7 +55,9 @@
       return {
         issubmited:false,
         dialogVisible:false,
-        comment:''
+        comment:'',
+        is_fever:'',
+        is_cough:'',
       };
     },
     created(){
@@ -78,7 +88,7 @@
             report.isinrisk = sessionStorage.getItem("isinrisk");
             report.temperature = sessionStorage.getItem("temperature");
             report.comment = this.comment;
-            inforeport(sessionStorage.getItem("user-token"),
+            inforeport(sessionStorage.getItem("user_id"),
                 report).then(response => {
                   const res = response.data;
                   if(res.flag){

@@ -3,11 +3,7 @@
     <div class="pie">
         <div id="report" style="float:left;width: 100%;height: 300px;"> </div>
     </div>
-    <div v-if="showsubmited">
-    <Form
-      :FormComponentData='tableData'>
-    </Form>
-    </div>
+    
   </div>
 </template>
 
@@ -22,16 +18,9 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 
 export default {
-    props:{
-        ComponentData:{
-            hassubmited:10,
-            notsubmited:20
-        }
-    },
+  props:['ComponentData'],
   data() {
     return {
-      showsubmited:false,
-      tableData: [],
       nowDate:''
     };
   },
@@ -44,43 +33,9 @@ export default {
     let month = date.getMonth() + 1; // 月
     let day = date.getDate(); // 日
     this.nowDate = `${year}/${month}/${day}`;
-    console.log(this.nowDate);
+    //console.log(this.nowDate);
   },
   methods:{
-    getsubmitData() {
-        let num = 5;
-        let tempdata  = [];
-        for(let i = 0;i<num;i++)
-        {
-          let tempobj = new Object();
-          tempobj.date = this.nowDate;
-          tempobj.name = '郑海关';
-          tempobj.number = '20262010061';
-          tempdata.push(tempobj);
-        }
-        this.tableData = tempdata;
-        for(let i = 0;i<num;i++)
-        {
-          console.log(this.tableData[i]);
-        }     
-    },
-    getunsubmitData(){
-        let num = 5;
-        let tempdata  = [];
-        for(let i = 0;i<num;i++)
-        {
-          let tempobj = new Object();
-          tempobj.date = this.nowDate;
-          tempobj.name = '阿关';
-          tempobj.number = '19262010062';
-          tempdata.push(tempobj);
-        }
-        this.tableData = tempdata;
-        for(let i = 0;i<num;i++)
-        {
-          console.log(this.tableData[i]);
-        }     
-    },
     //初始化数据
     initData() {
       // 基于准备好的dom，初始化echarts实例
@@ -88,13 +43,13 @@ export default {
       // 绘制图表
       let option = {
           title : {
-            text: '上报人数统计',//主标题
-            subtext: '纯属虚构',//副标题
+            text: '已上报/未上报人数统计',//主标题
+            //subtext: '纯属虚构',//副标题
             x:'center',//x轴方向对齐方式
           },
           tooltip : {
             trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
+            formatter: "{b} : {c} ({d}%)"
           },
           legend: {
             orient: 'vertical',
@@ -125,23 +80,18 @@ export default {
       let _this=this;
       this.myChart.on('click', function (param) {
           var index = param.dataIndex;
-          if(index === 0)
-          {
-            _this.showsubmited=false;
-            alert(index);
-            _this.getsubmitData();
-            _this.showsubmited=true;
-          }
-          else if(index == 1)
-          {
-            _this.showsubmited=false;
-            alert(index);
-            _this.getunsubmitData();
-            _this.showsubmited=true;
-          }
+          _this.click_pie(index);
           
       });
+    },
+    click_pie(index){
+      this.$emit('click_pie', index)
     }
+  },
+  watch: {
+    ComponentData(newValue, oldValue) {
+        this.initData();
+      }
   },
   components: { Form }
 }
