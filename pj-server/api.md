@@ -1,0 +1,8 @@
+- 查看公告
+  - localhost:8080/notice/get
+- 每日信息上报
+  - localhost:8080/student/report?userId=1&currentLocation=SH&hasFever=0&hasLeave=0&todayBodyTemperature=0&hasContact=0&isolationPeriod=0&remarks=None
+- 修改密码
+  - localhost:8080/user/modifyPwd?userId=1&newPw=123123
+- 修改个人信息
+  - localhost:8080/user/modifyInfo?userId=1&userName=hhh
