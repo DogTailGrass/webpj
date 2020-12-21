@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/student")
 public class StudentInfoController {
-
-    @Autowired
-    private StudentService studentService;
+    
 
     @PostMapping
     public int modify() {

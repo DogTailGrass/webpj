@@ -1,15 +1,14 @@
 -- 用户表
-CREATE TABLE `fdu_user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+CREATE TABLE `user` (
   `user_id` varchar(20) NOT NULL COMMENT '用户ID（学号）',
   `user_name` varchar(32) DEFAULT NULL COMMENT '用户名',
-  `user_pwd` varchar(20) DEFAULT NULL COMMENT '用户密码',
+  `pwd` varchar(20) DEFAULT NULL COMMENT '用户密码',
   `status` char(1) DEFAULT NULL COMMENT '状态（0正常 1删除）',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `create_by` varchar(20) DEFAULT NULL COMMENT '创建者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `update_by` varchar(20) DEFAULT NULL COMMENT '更新者',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户基本信息表';
 
 -- 用户基本信息表

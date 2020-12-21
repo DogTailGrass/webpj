@@ -16,14 +16,10 @@ import java.util.Date;
 @DynamicUpdate
 @Data
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
     /**
      * 用户ID（学号）
      */
+    @Id
     private String userId;
 
     /**
