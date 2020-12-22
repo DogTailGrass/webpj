@@ -20,22 +20,11 @@
     <br></br>
     <inquarantine></inquarantine>
     <br></br>
-    <contantpatient></contantpatient>    
-    <br></br>
-    <el-button type="success" round @click.native="dialogVisible=true">
-      备注
-    </el-button>
+    <contantpatient></contantpatient> 
     <br></br>
     <el-button type="success" round :disabled="issubmited" @click.native="handlesubmit">
       提交
     </el-button>
-    <li>今日是否发烧</li>
-    <el-radio v-model="is_fever" label="0">否</el-radio>
-    <el-radio v-model="is_fever" label="1">是</el-radio>
-    <br></br>
-    <li>今日是否咳嗽</li>
-    <el-radio v-model="is_cough" label="0">否</el-radio>
-    <el-radio v-model="is_cough" label="1">是</el-radio>
 
 </div>
 </template>

@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div> 
-      <h1>当前还有{{notsubmitedcount}}个同学没有上报，请及时处理。<br>点击相应的扇区查看人员名单</h1>
-    </div>
+    <h1>当前还有{{notsubmitedcount}}个同学没有上报，请及时处理。<br>点击相应的扇区查看人员名单</h1>
     <Pie 
       :ComponentData='piedata'
       @click_pie="click_pie">
     </Pie>
-
     <div class = "li" >
       <li v-if="shownotsubmit">未按时上报人员名单</li>
       <li v-if="showsubmit">按时上报人员名单</li>
     </div>
+
     <div v-if="showtable">
     <Form
       :ComponentData='tableData'>
@@ -19,6 +17,7 @@
     <br>
     <el-button type="primary" @click="exportdate()">表格导出Excel</el-button>
     </div>
+  
   </div>
 </template>
 
@@ -31,18 +30,16 @@ require('echarts/lib/component/title')
 
 
 import {getReportInfo} from '@/api/adminapi/getreportinfo'
-import { export2Excel } from '@/utils/excel.js'
 import Pie from '@/components/pie'
 import Form from '@/components/notsubmitedform'
+import { export2Excel } from '@/utils/excel.js'
 export default {
   data() {
     return {
       notsubmitedcount:'0',
-      date:'',
       showtable:false,
       shownotsubmit:false,
       showsubmit:false,
-      nowDate: '',
       tableData: [],
       piedata:{
         hassubmited:0,
@@ -53,62 +50,30 @@ export default {
   },
   created(){
       this.getcurrentData();
-      this.select_date = new Date(this.nowDate);
-      //this.select_date = this.nowDate;
-      //console.log("selectdate:",this.select_date);
   },
   mounted(){
     //this.getcurrentData();
   },
   methods:{
-    getcurrenttime(){
-      let date = new Date();
-      let year = date.getFullYear(); // 年
-      let month = date.getMonth() + 1; // 月
-      let day = date.getDate(); // 日
-      this.nowDate = `${year}/${month}/${day}`;
-    },
+    //获取当天的数据
     getcurrentData() {
-      this.getcurrenttime();
-      getReportInfo().then(response => {
+      getReportInfo(sessionStorage.getItem("user_id")).then(response => {
         const res = response.data;
         console.log(res, res.flag, res.data.token, res.message);
       })
       .catch(() => {
         console.log("failed");
-        //this.issubmited = false;
-        //this.$router.push("/pieview");
       });
 
       this.piedata = new Object();
-      this.piedata.hassubmited = 46;
-      this.piedata.notsubmited = 32;
-      this.notsubmitedcount = this.piedata.notsubmited;
+      this.piedata.title = '已按时上报/未按时上报人数统计';
+      this.piedata.name1 = '已按时上报';
+      this.piedata.name2 = '未按时上报';
+      this.piedata.data1 = 46;
+      this.piedata.data2 = 32;
+      this.notsubmitedcount = this.piedata.data2;
     },
-    getotherData() {
-      this.getcurrenttime();
-      //获取指定日期数据
-      getReportInfo().then(response => {
-        const res = response.data;
-        console.log(res, res.flag, res.data.token, res.message);
-      })
-      .catch(() => {
-        console.log("failed");
-      });      
-      this.piedata = new Object();
-      this.piedata.hassubmited = 35;
-      this.piedata.notsubmited = 32;
-    },
-    selctdate(val){      
-      let date = new Date(val);
-      let year = date.getFullYear(); // 年
-      let month = date.getMonth() + 1; // 月
-      let day = date.getDate(); // 日
-      let Date1 = `${year}/${month}/${day}`;
-      this.date = this.select_date / 1000
-      console.log(this.date);
-      this.getotherData();
-    },
+   
     click_pie(index){
       if(index === 0)
       {
@@ -120,6 +85,7 @@ export default {
       }
       this.showtable = true;
     },
+    
     getsubmitData() {
         this.shownotsubmit=false;
         this.showsubmit=true;

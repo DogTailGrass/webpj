@@ -4,7 +4,7 @@ import request from '@/utils/request'
 export function pushannouncement(user_id,announcement,push_date)
 {
     return request({
-        url: '/user/getannouncement',
+        url: '/api/user/getannouncement',
         method: 'post',
         data:{
             user_id:user_id,

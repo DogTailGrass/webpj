@@ -4,7 +4,7 @@ import request from '@/utils/request'
 export function pushpersonalinfo(user_id,personalinfo)
 {
     return request({
-        url: '/user/inforeport',
+        url: '/api/user/inforeport',
         method: 'post',
         data: {
             user_id:user_id,

@@ -38,61 +38,61 @@ export default {
   },
   methods: {
     submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-        //console.log(valid)
-        if (valid) {
-            adminlogin(this.form.username, this.form.password).then(response => {
-            console.log(valid);
+      this.$refs[formName].validate(valid => {
+      //console.log(valid)
+      if (valid) {
+        adminlogin(this.form.username, this.form.password).then(response => {
+        console.log(valid);
+        const res = response.data;
+        console.log(res, res.flag, res.data.token, res.message);
+        if (res.flag) {
+          // 验证成功，通过token获取用户信息
+          getAdminInfo(res.data.token).then(response => {
             const res = response.data;
-            console.log(res, res.flag, res.data.token, res.message);
             if (res.flag) {
-              // 验证成功，通过token获取用户信息
-              getAdminInfo(res.data.token).then(response => {
-                const res = response.data;
-                if (res.flag) {
-                // 验证成功，通过token获取用户信息
-                  getStudentInfo(res.token).then(response => {
-                  const resUser = response.data;
-                  if (resUser.flag) {
-                  //获取用户信息并保存
-                    sessionStorage.setItem("user-token", res.data.token);
-                    sessionStorage.setItem("useraddr",resUser.addr);
-                    sessionStorage.setItem("userphone",resUser.phone);
-                    sessionStorage.setItem("username", this.form.username);
-                  // 前往首页
-                  this.$router.push("/adminhomepage");
-                  } 
-                  else {
-                  // 使用elementui的消息提示
-                    this.$message({
-                      message: resUser.message,
-                      type: "warning"
-                    });
-                  }
-                 });
-                }
-              })
-            }
-            else {
-                // 未通过，弹出警告
-                // 使用elementui的消息提示
-                this.$message({
-                message: res.message,
-                type: "warning"
-                });
-            }
-            })
-            .catch(() => {
-              console.log("failed");
-              //打桩
-              sessionStorage.setItem("user-token", "admin");
+            // 验证成功，通过token获取用户信息
+              getStudentInfo(res.token).then(response => {
+              const resUser = response.data;
+              if (resUser.flag) {
+              //获取用户信息并保存
+                sessionStorage.setItem("user-token", res.data.token);
+                sessionStorage.setItem("useraddr",resUser.addr);
+                sessionStorage.setItem("userphone",resUser.phone);
+                sessionStorage.setItem("username", this.form.username);
+              // 前往首页
               this.$router.push("/adminhomepage");
-            });
-        } 
-        else {
-            console.log('验证失败');
-            return false;
+              } 
+              else {
+              // 使用elementui的消息提示
+                this.$message({
+                  message: resUser.message,
+                  type: "warning"
+                });
+              }
+              });
+            }
+          })
         }
+        else {
+            // 未通过，弹出警告
+            // 使用elementui的消息提示
+            this.$message({
+            message: res.message,
+            type: "warning"
+            });
+        }
+        })
+        .catch(() => {
+          console.log("failed");
+          //打桩
+          sessionStorage.setItem("user-token", "admin");
+          this.$router.push("/adminhomepage");
+        });
+      } 
+      else {
+        console.log('验证失败');
+        return false;
+      }
     });
        }
   }

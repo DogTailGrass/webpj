@@ -21,7 +21,7 @@ export default {
   props:['ComponentData'],
   data() {
     return {
-      nowDate:''
+      nowDate:'',
     };
   },
   created(){
@@ -43,8 +43,8 @@ export default {
       // 绘制图表
       let option = {
           title : {
-            text: '已上报/未上报人数统计',//主标题
-            //subtext: '纯属虚构',//副标题
+            //text: '已上报/未上报人数统计',//主标题
+            text: this.ComponentData.title,//主标题
             x:'center',//x轴方向对齐方式
           },
           tooltip : {
@@ -54,7 +54,7 @@ export default {
           legend: {
             orient: 'vertical',
             bottom: 'bottom',
-            data: ['已上报','未上报']
+            data: [this.ComponentData.name1,this.ComponentData.name2]
           },
           series : [
             {
@@ -63,8 +63,8 @@ export default {
                 radius : '55%',
                 center: ['50%', '60%'],
                 data:[
-                  {value:this.ComponentData.hassubmited, name:'已上报'},
-                  {value:this.ComponentData.notsubmited, name:'未上报'}
+                  {value:this.ComponentData.data1, name:this.ComponentData.name1},
+                  {value:this.ComponentData.data2, name:this.ComponentData.name2}
                 ],
                 itemStyle: {
                     emphasis: {

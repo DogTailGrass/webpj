@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form :rules="rules" :model="form" label-width="80px" class="login-form">
+    <el-form ref="form" :rules="rules" :model="form" label-width="80px" class="login-form">
       <h2 class="login-title">学生系统</h2>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username"></el-input>
@@ -16,7 +16,7 @@
     </el-form>
 
     <el-dialog title="申请重置密码" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
-      <el-form :rules="rules" :model="resetpasswordform" label-width="80px">
+      <el-form :rules="resetpasswordrules" :model="resetpasswordform" label-width="80px">
       <el-form-item label="姓名" prop="username">
         <el-input v-model="resetpasswordform.username"></el-input>
       </el-form-item>
@@ -44,19 +44,22 @@ export default {
         username: "",
         password: ""
       },
+      rules:{
+          username:[
+              {required: true, message:"用户名不能为空", trigger: 'blur'}
+          ],
+          password:[
+              {required: true, message:"密码不能为空", trigger: 'blur'}
+          ]
+      },
       resetpasswordform:{
         username: "",
         number: "",
         phone: "",
       },
-      rules:{
-          username:[
-              {required: true, message:"用户名不能为空", trigger: 'blur'},
-              {min: 3, max: 10, message: "用户名3-10位", trigger: 'blur'}
-          ],
-          password:[
-              {required: true, message:"密码不能为空", trigger: 'blur'},
-              {min: 3, max: 10, message: "密码3-10位", trigger: 'blur'}
+      resetpasswordrules:{
+        username:[
+              {required: true, message:"用户名不能为空", trigger: 'blur'}
           ],
           number:[
               {required: true, message:"学工号不能为空", trigger: 'blur'},

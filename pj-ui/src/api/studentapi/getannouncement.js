@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function get_newest_announcement(user_id)
 {
     return request({
-        url: '/user/get_newest_announcement',
-        method: 'post',
+        url: '/api/user/get_newest_announcement',
+        method: 'get',
         data:{
             user_id:user_id
         }
@@ -15,8 +15,8 @@ export function get_newest_announcement(user_id)
 export function get_all_announcement(user_id)
 {
     return request({
-        url: '/user/get_all_announcement',
-        method: 'post',
+        url: '/api/user/get_all_announcement',
+        method: 'get',
         data:{
             user_id:user_id
         }

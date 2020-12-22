@@ -36,9 +36,6 @@
                             <router-link to="/studenthomepage/viewannouncement">
                                 <el-menu-item index="3"><i class="el-icon-setting"></i>查看公告</el-menu-item>
                             </router-link>
-                            <router-link to="/studenthomepage/changepassword">
-                                <el-menu-item index="4"><i class="el-icon-setting"></i>修改密码</el-menu-item>
-                            </router-link>
                         </el-menu>
                     </div>
                 </el-col>

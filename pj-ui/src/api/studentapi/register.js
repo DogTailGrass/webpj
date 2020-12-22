@@ -6,7 +6,7 @@ import request from '@/utils/request'
 // 登录
 export function studentregister(form){
     return request({
-        url: '/user/studentlogin',
+        url: '/api/user/studentlogin',
         method: 'post',
         data: {
             username:form.username,

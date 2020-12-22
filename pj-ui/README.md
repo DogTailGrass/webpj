@@ -28,3 +28,4 @@ npm i element-ui -S
 npm install --save vue-router
 npm install -S file-saver xlsx
 npm install -D script-loader
+npm install --save qs
