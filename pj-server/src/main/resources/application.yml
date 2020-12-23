@@ -11,3 +11,5 @@ spring:
 #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 server:
   port: 5050
+  servlet:
+    context-path: /api # api统一前缀

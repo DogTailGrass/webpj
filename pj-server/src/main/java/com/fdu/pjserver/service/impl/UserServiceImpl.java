@@ -6,12 +6,14 @@ import com.fdu.pjserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
-    public User addUser(User user) {
+    public User add(User user) {
         return userDAO.save(user);
     }
 
@@ -23,7 +25,8 @@ public class UserServiceImpl implements UserService {
         return userDAO.save(user);
     }
 
-    public User retrieve(String userId) {
-        return userDAO.findUserByUserId(userId);
+    public Optional<User> retrieve(String userId) {
+        return userDAO.findById(userId);
+//        return userDAO.findUserByUserId(userId);
     }
 }

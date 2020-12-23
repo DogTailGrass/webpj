@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-public interface UserDAO extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
+public interface UserDAO extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
     @Query(value = "from User where user_id=?1")
     public User findUserByUserId(String userId);
 }

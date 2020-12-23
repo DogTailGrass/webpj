@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 public class User {
     /**
-     * 用户ID（学号）
+     * 用户ID（学号或管理员账号）
      */
     @Id
     private String userId;

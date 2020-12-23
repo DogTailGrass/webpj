@@ -8,27 +8,56 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @DynamicUpdate
-public class Notice {
+public class StudentInfo {
+    /**
+     * 用户ID（学号）
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String userId;
 
-    private Date validDate;
+    /**
+     * 联系方式
+     */
+    private String mobile;
 
-    private Long validTime;
+    /**
+     * 院系
+     */
+    private String department;
 
-    private String title;
+    /**
+     * 分类（2研究生）
+     */
+    private String degree;
 
-    private String content;
+    /**
+     * 是否全日制
+     */
+    private Integer fullTime;
 
-    private Integer status;
+    /**
+     * 辅导员姓名
+     */
+    private String counselorName;
+
+    /**
+     * 是否毕业班学生（0否 1是）
+     */
+    private Integer graduation;
+
+    /**
+     * 居住地址
+     */
+    private String address;
 
     @CreatedDate
     private Date createTime;
