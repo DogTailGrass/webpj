@@ -20,14 +20,29 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * 公告显示时间
+     */
     private Date validDate;
 
+    /**
+     * 公告显示时间戳
+     */
     private Long validTime;
 
+    /**
+     * 公告标题
+     */
     private String title;
 
+    /**
+     * 公告内容
+     */
     private String content;
 
+    /**
+     * 公告状态
+     */
     private Integer status;
 
     @CreatedDate

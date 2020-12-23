@@ -19,14 +19,14 @@ public class StudentInfoController {
      * @apiGroup 学生基本信息
      * @apiName add
      * @apiDescription 新增学生基本信息
-     * @apiParam (请求参数) {String} userId
-     * @apiParam (请求参数) {String} mobile
-     * @apiParam (请求参数) {String} department
-     * @apiParam (请求参数) {String} degree
-     * @apiParam (请求参数) {Number} fullTime
-     * @apiParam (请求参数) {String} counselorName
-     * @apiParam (请求参数) {Number} graduation
-     * @apiParam (请求参数) {String} address
+     * @apiParam (请求参数) {String} userId 用户ID（学号）
+     * @apiParam (请求参数) {String} mobile 联系方式
+     * @apiParam (请求参数) {String} department 院系
+     * @apiParam (请求参数) {String} degree 分类（本科生，研究生，博士生）
+     * @apiParam (请求参数) {Number} fullTime 是否全日制
+     * @apiParam (请求参数) {String} counselorName 辅导员姓名
+     * @apiParam (请求参数) {Number} graduation 是否毕业班学生（0否 1是）
+     * @apiParam (请求参数) {String} address 居住地址
      * @apiParamExample 请求参数示例
      * counselorName=李老师&address=上海市XX区XX路&graduation=0&mobile=13800000000&degree=研究生&fullTime=0&department=软件学院&userId=20262010001
      * @apiSuccess (响应结果) {Object} response
@@ -111,6 +111,21 @@ public class StudentInfoController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     public AjaxResult get(@RequestParam String userId) {
         return AjaxResult.success(studentInfoService.retrieve(userId));
+    }
+
+    /**
+     * @api {GET} /student_info/get_all getAll
+     * @apiVersion 1.0.0
+     * @apiGroup 学生基本信息
+     * @apiName getAll
+     * @apiDescription 获取所有学生的基本信息
+     * @apiSuccess (响应结果) {Object} response
+     * @apiSuccessExample 响应结果示例
+     * {}
+     */
+    @RequestMapping(value = "/get_all", method = RequestMethod.GET)
+    public AjaxResult getAll() {
+        return AjaxResult.success(studentInfoService.retrieveAll());
     }
 
 

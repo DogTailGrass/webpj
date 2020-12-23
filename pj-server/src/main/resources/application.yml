@@ -6,6 +6,8 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/pj?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   jpa:
     show-sql: true
+  jackson:
+    time-zone: GMT+8
 #    hibernate:
 #      naming:
 #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

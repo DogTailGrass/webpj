@@ -2,6 +2,7 @@ package com.fdu.pjserver.service;
 
 import com.fdu.pjserver.dao.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -12,4 +13,6 @@ public interface UserService {
     User update(User user);
 
     Optional<User> retrieve(String userId);
+
+    List<User> retrieveAll();
 }

@@ -21,9 +21,9 @@ public class UserController {
      * @apiGroup 用户
      * @apiName add
      * @apiDescription 创建用户
-     * @apiParam (请求参数) {String} userId
-     * @apiParam (请求参数) {String} userName
-     * @apiParam (请求参数) {String} pwd
+     * @apiParam (请求参数) {String} userId 用户ID（学号或管理员账号）
+     * @apiParam (请求参数) {String} userName 姓名
+     * @apiParam (请求参数) {String} pwd 密码
      * @apiParamExample 请求参数示例
      * userName=张三&pwd=123&userId=20262010001
      * @apiSuccess (响应结果) {Object} response
@@ -32,8 +32,8 @@ public class UserController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxResult add(@RequestParam String userId,
-                       @RequestParam String userName,
-                       @RequestParam String pwd) {
+                          @RequestParam String userName,
+                          @RequestParam String pwd) {
         User user = new User();
         user.setUserId(userId);
         user.setUserName(userName);
@@ -70,7 +70,7 @@ public class UserController {
      * @apiVersion 1.0.0
      * @apiGroup 用户
      * @apiName modifyInfo
-     * @apiDescription 修改用户名
+     * @apiDescription 修改用户姓名
      * @apiParam (请求参数) {String} userId
      * @apiParam (请求参数) {String} userName
      * @apiParamExample 请求参数示例
@@ -111,5 +111,38 @@ public class UserController {
             }
         }
         return AjaxResult.error("登陆失败");
+    }
+
+    /**
+     * @api {POST} /user/get get
+     * @apiVersion 1.0.0
+     * @apiGroup 用户
+     * @apiName get
+     * @apiDescription 获取用户信息
+     * @apiParam (请求参数) {String} userId
+     * @apiParamExample 请求参数示例
+     * userId=Y7kmt
+     * @apiSuccess (响应结果) {Object} response
+     * @apiSuccessExample 响应结果示例
+     * {}
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    public AjaxResult get(@RequestParam String userId) {
+        return AjaxResult.success(userService.retrieve(userId));
+    }
+
+    /**
+     * @api {GET} /user/get_all getALL
+     * @apiVersion 1.0.0
+     * @apiGroup 用户
+     * @apiName getALL
+     * @apiDescription 获取所有用户信息
+     * @apiSuccess (响应结果) {Object} response
+     * @apiSuccessExample 响应结果示例
+     * {}
+     */
+    @RequestMapping(value = "/get_all", method = RequestMethod.GET)
+    public AjaxResult getALL() {
+        return AjaxResult.success(userService.retrieveAll());
     }
 }

@@ -35,7 +35,7 @@ public class StudentInfo {
     private String department;
 
     /**
-     * 分类（2研究生）
+     * 分类（本科生，研究生，博士生）
      */
     private String degree;
 

@@ -1,8 +1,8 @@
 package com.fdu.pjserver.service;
 
 import com.fdu.pjserver.dao.StudentInfo;
-import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StudentInfoService {
@@ -13,4 +13,6 @@ public interface StudentInfoService {
     StudentInfo update(StudentInfo studentInfo);
 
     Optional<StudentInfo> retrieve(String userId);
+
+    List<StudentInfo> retrieveAll();
 }

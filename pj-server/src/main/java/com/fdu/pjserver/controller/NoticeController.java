@@ -37,13 +37,13 @@ public class NoticeController {
      * @apiGroup 公告
      * @apiName add
      * @apiDescription 新增公告
-     * @apiParam (请求参数) {String} title
-     * @apiParam (请求参数) {String} content
-     * @apiParam (请求参数) {Number} status
-     * @apiParam (请求参数) {Number} validDate
-     * @apiParam (请求参数) {Number} validTime
+     * @apiParam (请求参数) {String} title 公告标题
+     * @apiParam (请求参数) {String} content 公告内容
+     * @apiParam (请求参数) {Number} status 公告状态
+     * @apiParam (请求参数) {Number} validDate 公告显示时间
+     * @apiParam (请求参数) {Number} validTime 公告显示时间戳
      * @apiParamExample 请求参数示例
-     * title=公告2&content=lll&status=1&validDate=2020/12/23 23:24:46&validTime=1608737086
+     * title=公告2&content=lll&status=1&validDate=2020/12/2&validTime=1608737086
      * @apiSuccess (响应结果) {Object} response
      * @apiSuccessExample 响应结果示例
      * {}
@@ -77,7 +77,7 @@ public class NoticeController {
      * @apiParam (请求参数) {Number} validDate
      * @apiParam (请求参数) {Number} validTime
      * @apiParamExample 请求参数示例
-     * validDate=2020/12/23 23:24:46&validTime=1608737086&id=7159&title=标题&content=巴拉巴拉&status=1
+     * validDate=2020/12/23&validTime=1608737086&id=7159&title=标题&content=巴拉巴拉&status=1
      * @apiSuccess (响应结果) {Object} response
      * @apiSuccessExample 响应结果示例
      * {}
