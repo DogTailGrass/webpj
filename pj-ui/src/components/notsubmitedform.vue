@@ -5,6 +5,11 @@
       height="250"
       style="width: 100%">
       <el-table-column
+        prop="index"
+        label="序号"
+        width="180">
+      </el-table-column>
+      <el-table-column
         prop="date"
         label="日期"
         width="180">
@@ -24,14 +29,14 @@
 
 <script>
 export default {
-    props:{
-        ComponentData:{
-            type: Array,
-            default: function() {
-            }
-        }
-
-    },
+  props:['ComponentData'],
+  //  props:{
+  //      ComponentData:{
+  //          type: Array,
+  //          default: function() {
+  //          }
+  //      }
+  //  },
   data() {
     return {
     };

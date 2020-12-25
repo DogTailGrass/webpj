@@ -32,8 +32,8 @@
 </div>
 </template>
 <script>
-import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
-import {studentlogin, getStudentInfo} from '@/api/studentapi/login'
+import {getinfo} from '@/api/studentapi/pushpersonalinfo'
+import {modifyinfo} from '@/api/studentapi/pushpersonalinfo'
 export default {
   data() {
     return {
@@ -51,41 +51,51 @@ export default {
   created(){
   },
   mounted(){
-    this.getuserinfo();
+    if(sessionStorage.getItem("login_status") !== "1")
+    {
+        this.$router.push("/studentlogin");
+        console.log("登录状态有错误");
+    }
+    else
+    {
+      this.getuserinfo();
+    }
+    
   },
   methods: {    
     getuserinfo(){
-      getStudentInfo(sessionStorage.getItem("user_id")).then(response => {
-        const resUser = response.data;
-        if (resUser.flag) {
-            //获取用户信息，填入表格并保存
-            this.form.personalname = resUser.username;
-            this.form.addr = resUser.address;
-            this.form.phonenumber = resUser.mobile;
-            this.form.school = resUser.school;
-            this.form.category = resUser.category;
-            this.form.type = resUser.type;
-            this.form.teacher_name = resUser.teacher_name;
-            let objStr = JSON.stringify(this.form)
-            sessionStorage.setItem("student_personalinfo", objStr);
+      getinfo(sessionStorage.getItem("user_id")).then(response => {
+        console.log(response);
+        let res = response.data;
+        console.log(res.code);
+        if (res.code === 200) {
+          //alert("获取用户信息成功");
+          //获取用户信息，填入表格并保存
+          let resUser = res.data;
+          //console.log(resUser);
+          //this.form.personalname = resUser.username;
+          this.form.personalname = sessionStorage.getItem("user_name");
+          this.form.addr = resUser.address;
+          this.form.phonenumber = resUser.mobile;
+          this.form.school = resUser.department;
+          this.form.category = resUser.degree;
+          if(resUser.fullTime === 0)
+            this.form.type = '非全日制';
+          else
+             this.form.type = '全日制';
+          this.form.teacher_name = resUser.counselorName;
+          //console.log(this.form);
+          let objStr = JSON.stringify(this.form)
+          sessionStorage.setItem("student_personalinfo", objStr);
+          sessionStorage.setItem("personalinfo_loaded",1);
         } 
         else {
           alert("获取用户信息失败，请联系管理员");
         }
-        })
-        .catch(() => {
-          //alert("获取用户信息失败，请联系管理员");
-          //打桩代码
-          this.form.personalname = '郑海关';
-          this.form.addr = '杨浦区';
-          this.form.phonenumber = '18761880125';
-          this.form.school = '软件学院';
-          this.form.category = '研究生';
-          this.form.type = '非全日制';
-          this.form.teacher_name = '廖炳辉';
-          let objStr = JSON.stringify(this.form)
-          sessionStorage.setItem("student_personalinfo", objStr);
-        });
+      })
+      .catch(() => {
+        alert("服务端没有响应，请联系管理员");
+      });
     },
     handledialogcancel(){
       let temp = sessionStorage.getItem("student_personalinfo");
@@ -94,12 +104,17 @@ export default {
       console.log(info.personalname);
     },
     handledialogconfim(){
-      let personalinfo=new Object();
-      personalinfo.addr = this.form.addr;
-      personalinfo.phonenumber = this.form.phonenumber;
-      pushpersonalinfo(sessionStorage.getItem("user_id"),personalinfo).then(response => {
-          const res = response.data;
-          if(res.flag){
+      let temp = sessionStorage.getItem("student_personalinfo");
+      let info = JSON.parse(temp);
+      if(info.addr !== this.form.addr || info.phonenumber !== this.form.phonenumber)
+      {
+        let personalinfo=new Object();
+        personalinfo.addr = this.form.addr;
+        personalinfo.phonenumber = this.form.phonenumber;
+        modifyinfo(sessionStorage.getItem("user_id"),personalinfo).then(response => {
+          console.log(response);
+          let res = response.data;
+          if(res.code === 200){
             alert("提交成功");
             let objStr = JSON.stringify(this.form)
             sessionStorage.setItem("student_personalinfo", objStr);
@@ -107,18 +122,12 @@ export default {
           else{
             alert("提交失败，请重试或联系管理员");
           }
-          //console.log(res, res.flag, res.data.token, res.message);
           })
           .catch(() => {
             alert("提交失败，请重试或联系管理员");
-            //打桩
-            let objStr = JSON.stringify(this.form)
-            sessionStorage.setItem("student_personalinfo", objStr);
-            let temp = sessionStorage.getItem("student_personalinfo");
-            let info = JSON.parse(temp);
-            this.form = info;
-            console.log(info.addr);
           });
+      }
+      
     }    
   },
   components: {  }

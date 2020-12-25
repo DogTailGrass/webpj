@@ -32,11 +32,14 @@
                             <router-link to="/adminhomepage/analyze">
                                 <el-menu-item index="2"><i class="el-icon-menu"></i>数据分析</el-menu-item>
                             </router-link>
+                            <router-link to="/adminhomepage/trend">
+                                <el-menu-item index="3"><i class="el-icon-menu"></i>趋势分析</el-menu-item>
+                            </router-link>
                             <router-link to="/adminhomepage/publishannounce">
-                                <el-menu-item index="3"><i class="el-icon-setting"></i>发布公告</el-menu-item>
+                                <el-menu-item index="4"><i class="el-icon-setting"></i>公告发布</el-menu-item>
                             </router-link>
                             <router-link to="/adminhomepage/checkannounce">
-                                <el-menu-item index="4"><i class="el-icon-setting"></i>公告显示</el-menu-item>
+                                <el-menu-item index="5"><i class="el-icon-setting"></i>公告查看</el-menu-item>
                             </router-link>
                             <router-link to="/adminhomepage/resetstudentpassword">
                                 <el-badge :value="infocount" class="item" v-show="infocount != 0">
@@ -74,7 +77,15 @@ export default {
     },
 
     created(){
-        this.$router.push('/adminhomepage/reportconfirm');
+        let login_status = sessionStorage.getItem("login_status");
+        console.log(login_status)
+        if(login_status !== "1")
+        {
+            this.$router.push("/studentlogin");
+            console.log("登录状态有错误");
+        }
+        else
+            this.$router.push('/adminhomepage/reportconfirm');
     },
     mounted(){
         let _this = this; // 声明一个变量指向Vue实例this，保证作用域一致
@@ -97,19 +108,21 @@ export default {
         handleSelect(key, keyPath){
             switch(key){
                 case '1':
-                    //this.$router.push('/studentreport');
                     this.breadcrumbItems  = ['管理员系统->上报确认']
                     break;
                 case '2':
                     this.breadcrumbItems  = ['管理员系统->数据分析']
                     break;
                 case '3':
-                    this.breadcrumbItems  = ['管理员系统->发布公告']
+                    this.breadcrumbItems  = ['管理员系统->近一周趋势']
                     break;
                 case '4':
-                    this.breadcrumbItems  = ['管理员系统->查看公告']
+                    this.breadcrumbItems  = ['管理员系统->公告发布']
                     break;
                 case '5':
+                    this.breadcrumbItems  = ['管理员系统->公告查看']
+                    break;
+                case '6':
                     this.breadcrumbItems  = ['管理员系统->重置学生密码']
                     break;
             }

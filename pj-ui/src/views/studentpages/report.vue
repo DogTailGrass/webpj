@@ -45,17 +45,21 @@
         issubmited:false,
         dialogVisible:false,
         comment:'',
-        is_fever:'',
-        is_cough:'',
       };
     },
     created(){
+      if(sessionStorage.getItem("login_status") !== "1")
+      {
+          this.$router.push("/studentlogin");
+          console.log("登录状态有错误");
+          return;
+      }
       if(null === sessionStorage.getItem("issubmited"))
       {
         this.issubmited=false;
       }
       else{
-        this.issubmited=true;
+        this.issubmited=false;
       }
       console.log(this.issubmited);
     },
@@ -79,26 +83,50 @@
             report.comment = this.comment;
             inforeport(sessionStorage.getItem("user_id"),
                 report).then(response => {
+                  console.log(response);
                   const res = response.data;
-                  if(res.flag){
+                  if(res.code === 200){
                     alert("提交成功");
                     sessionStorage.setItem("issubmited",true);
                     this.issubmited = true;
                   }
-                  //console.log(res, res.flag, res.data.token, res.message);
+                  else{
+                    alert("服务器返回错误，请重试");
+                  }
                   })
             .catch(() => {
-              console.log("failed");
               alert("提交失败");
-              //sessionStorage.setItem("issubmited",true);
-              //this.issubmited = true;
             });
           }
           
         },
         checkelement(){
+          if(null === sessionStorage.getItem("isfever")){
+            alert("请选择今日是否发烧");
+            return 0;
+          }
+          if(null === sessionStorage.getItem("isinschool")){
+            alert("请选择今日是否在校");
+            return 0;
+          }
           if(null === sessionStorage.getItem("iscontantpatient")){
             alert("请选择今日是否与确诊/疑似人群接触");
+            return 0;
+          }
+          if(null === sessionStorage.getItem("iscough")){
+            alert("请选择今日是否咳嗽");
+            return 0;
+          }
+          if(null === sessionStorage.getItem("isinquarantine")){
+            alert("请选择今日是否处在隔离期");
+            return 0;
+          }
+          if(null === sessionStorage.getItem("isinrisk")){
+            alert("请选择今日是否在中高风险区域");
+            return 0;
+          }
+          if(null === sessionStorage.getItem("temperature")){
+            alert("请选择今日提问是否正常");
             return 0;
           }
           return 1;

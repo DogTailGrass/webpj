@@ -55,6 +55,9 @@
         </div>
 
         <el-dialog title="最新公告" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
+            <li>标题:</li>
+            <el-input v-model="title" type="textarea" :rows="1"></el-input>
+            <li>内容:</li>
             <el-input v-model="announce" type="textarea" :rows="15"></el-input>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click.native="handledialogconfim">确 定</el-button>
@@ -63,7 +66,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-import {get_newest_announcement} from '@/api/studentapi/getannouncement'
+import {get_notice} from '@/api/studentapi/getannouncement'
 export default {
     data(){
         return {
@@ -71,41 +74,58 @@ export default {
             breadcrumbItems: ['学生系统'],
             dialogVisible:false,
             announce:'',
+            title:'',
             time:new Date()
         }
     },
     created(){
-        get_newest_announcement(sessionStorage.getItem("user-id")).then(response => {
-            const res = response.data;
-            if(res.flag){
-                this.dialogVisible = true;
-                //添加判断逻辑，显示第一条公告
-                this.announce = res.announce;
-                //this.$router.push("/studenthomepage/viewannouncement");     
-            }
-        })
-        .catch(() => {
-            this.dialogVisible = true;
-            this.announce = '门前大桥下';
-            console.log("fail");
-            
-        });
-        
+        //console.log("created");
+        //console.log(sessionStorage.getItem("login_status"));
+        let login_status = sessionStorage.getItem("login_status");
+        console.log(login_status)
+        if(sessionStorage.getItem("login_status") !== "1")
+        {
+            this.$router.push("/studentlogin");
+            console.log("登录状态有错误");
+        }
+        else
+        {
+            this.loadhomepage();
+        }
     },
     mounted(){
-        let _this = this; // 声明一个变量指向Vue实例this，保证作用域一致
-        this.timer = setInterval(() => {
-        let today=new Date();
-        let h=today.getHours();
-        let m=today.getMinutes();
-        let s=today.getSeconds();
-        // add a zero in front of numbers<10
-        m=this.checkTime(m);
-        s=this.checkTime(s);
-        _this.time = h+":"+m+":"+s; // 修改数据date
-        }, 1000);
     },
     methods:{
+        loadhomepage(){
+            let _this = this; // 声明一个变量指向Vue实例this，保证作用域一致
+            this.timer = setInterval(() => {
+            let today=new Date();
+            let h=today.getHours();
+            let m=today.getMinutes();
+            let s=today.getSeconds();
+            // add a zero in front of numbers<10
+            m=this.checkTime(m);
+            s=this.checkTime(s);
+            _this.time = h+":"+m+":"+s; // 修改数据date
+            }, 1000);
+
+           
+            get_notice().then(response => {
+            const res = response.data;
+            console.log(response);
+            if(res.code === 200){
+                this.dialogVisible = true;
+                //添加判断逻辑，显示第一条公告
+                this.announce = res.data[0].content;  
+                this.title = res.data[0].title;
+                sessionStorage.setItem("homepage_loaded",1);
+            }
+            })
+            .catch(() => {
+                console.log("fail");
+            });
+            
+        },
         handleIconClick(ev) {
             console.log(ev);
         },
@@ -124,6 +144,8 @@ export default {
         },
         handlelogout(){
             console.log("handlelogout");
+            sessionStorage.clear();
+            sessionStorage.setItem("login_status",0);
             this.$router.push("/studentlogin");
         },
         handledialogconfim(){

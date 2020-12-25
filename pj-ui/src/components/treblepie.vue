@@ -64,7 +64,8 @@ export default {
                 center: ['50%', '60%'],
                 data:[
                   {value:this.ComponentData.data1, name:this.ComponentData.name1},
-                  {value:this.ComponentData.data2, name:this.ComponentData.name2}
+                  {value:this.ComponentData.data2, name:this.ComponentData.name2},
+                  {value:this.ComponentData.data3, name:this.ComponentData.name3},
                 ],
                 itemStyle: {
                     emphasis: {

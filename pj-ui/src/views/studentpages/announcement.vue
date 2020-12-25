@@ -43,7 +43,7 @@
 </div>
 </template>
 <script>
-import {get_all_announcement} from '@/api/studentapi/getannouncement'
+import {get_notice} from '@/api/studentapi/getannouncement'
     export default {
     data() {
       return {
@@ -54,52 +54,58 @@ import {get_all_announcement} from '@/api/studentapi/getannouncement'
       };
     },
     created(){
-      get_all_announcement(sessionStorage.getItem("user-id")).then(response => {
-        const res = response.data;
-        if(res.flag){
-          this.announce = res.announce;
-        }
-      })
-      .catch(() => {
-        let tempdata  = [];
-        let date = new Date();
-        let year = date.getFullYear(); // 年
-        let month = date.getMonth() + 1; // 月
-        let day = date.getDate(); // 日
-        let hour = date.getHours();
-        let min = date.getMinutes();
-        let sec = date.getSeconds();
-        let nowDate = `${year}/${month}/${day}`;
-        let time =`${hour}:${min}:${sec}`;
-        for(let i = 0;i<5;i++)
-        {
-          tempdata[i] = new Object();
-          tempdata[i].index = i + 1;
-          tempdata[i].title="紧急调查1";
-          tempdata[i].publishdate = nowDate;
-          tempdata[i].publishtime = time;
-          tempdata[i].announcement="门前大桥下，游来一群鸭";
-        }
-        for(let i = 5;i<10;i++)
-        {
-          tempdata[i] = new Object();
-          tempdata[i].index = i + 1;
-          tempdata[i].title="紧急调查2";
-          tempdata[i].publishdate = nowDate;
-          tempdata[i].publishtime = time;
-          tempdata[i].announcement="一行白鹭上青天";
-        }
-        this.tableData = tempdata;
-        console.log("fail");
-      });
+      if(sessionStorage.getItem("login_status") !== "1")
+      {
+          this.$router.push("/studentlogin");
+          console.log("登录状态有错误");
+      }
+      else
+      {
+        this.get_announce();
+      }
     },
     methods:{
-
+      get_announce(){
+        get_notice().then(response => {
+        const res = response.data;
+        console.log(response);
+        if(res.code === 200){
+          let announce = res.data;
+          let tempdata  = [];
+          for(let i = 0;i<announce.length;i++)
+          {
+            tempdata[i] = new Object();
+            tempdata[i].index = i + 1;
+            tempdata[i].title=announce[i].title;
+            let date = new Date(announce[i].validDate);
+            let year = date.getFullYear(); // 年
+            let month = date.getMonth() + 1; // 月
+            let day = date.getDate(); // 日
+            let hour = date.getHours();
+            let min = date.getMinutes();
+            let sec = date.getSeconds();
+            let validDate = `${year}/${month}/${day}`;
+            let time =`${hour}:${min}:${sec}`;
+            tempdata[i].publishdate = validDate;
+            tempdata[i].publishtime = time;
+            tempdata[i].announcement=announce[i].content;
+          }
+          this.tableData = tempdata;
+          sessionStorage.setItem("announce_loaded",1);
+          let objStr = JSON.stringify(this.tableData)
+          sessionStorage.setItem("announcement", objStr);
+        }
+        })
+        .catch(() => {
+          alert("服务器返回数据失败");
+        });
+      },
       handleClick(row){
         console.log(row.index);
         this.dialogVisible = true;
         let idx = row.index;
-        this.announcement = this.tableData[idx].announcement;
+        console.log(this.tableData[idx-1]);
+        this.announcement = this.tableData[idx-1].announcement;
 
       },
       handledialogconfim(){
