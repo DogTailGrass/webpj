@@ -101,7 +101,7 @@ export default {
       this.$refs[formName].validate(valid => {
       //console.log(valid)
       if (valid) {
-        studentlogin(this.resetpasswordform).then(response => {
+        studentlogin(this.form.userId,this.form.pwd).then(response => {
           console.log(response);
           let res = response.data;
           console.log(res.code);
