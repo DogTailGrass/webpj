@@ -2,7 +2,7 @@ package com.fdu.pjserver.repository;
 
 
 import com.fdu.pjserver.dao.DailyReport;
-import com.fdu.pjserver.dao.User;
+import com.fdu.pjserver.dao.UserDailyReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +17,9 @@ public interface DailyReportDAO extends JpaRepository<DailyReport, String>, JpaS
 
     @Query(value = "from DailyReport where userId=?1")
     public List<DailyReport> findDailyReportByUserId(String userId);
+
+    @Query(value = "select new com.fdu.pjserver.dao.UserDailyReport(r.userId,u.userName,r.reportDate,r.hasFever,r.atSchool," +
+            "r.temperatureRange,r.hasCough,r.atIsolation,r.hasRiskContact,r.hasInfectedContact) " +
+            "from DailyReport r left join User u on r.userId=u.userId where r.reportDate=?1")
+    public List<UserDailyReport> findAllReportByDate(Date reportDate);
 }

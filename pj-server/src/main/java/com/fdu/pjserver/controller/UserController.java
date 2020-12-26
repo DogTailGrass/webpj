@@ -23,6 +23,7 @@ public class UserController {
      * @apiDescription 创建用户
      * @apiParam (请求参数) {String} userId 用户ID（学号或管理员账号）
      * @apiParam (请求参数) {String} userName 姓名
+     * @apiParam (请求参数) {String} mobile 手机号
      * @apiParam (请求参数) {String} pwd 密码
      * @apiParamExample 请求参数示例
      * userName=张三&pwd=123&userId=20262010001
@@ -33,11 +34,13 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxResult add(@RequestParam String userId,
                           @RequestParam String userName,
+                          @RequestParam String mobile,
                           @RequestParam String pwd) {
         User user = new User();
         user.setUserId(userId);
         user.setUserName(userName);
         user.setPwd(pwd);
+        user.setMobile(mobile);
         user.setStatus(1);
         return AjaxResult.success(userService.add(user));
     }
@@ -144,5 +147,44 @@ public class UserController {
     @RequestMapping(value = "/get_all", method = RequestMethod.GET)
     public AjaxResult getALL() {
         return AjaxResult.success(userService.retrieveAll());
+    }
+
+    /**
+     * @api {GET} /user/update_pwd updatePwd
+     * @apiVersion 1.0.0
+     * @apiGroup 用户
+     * @apiName updatePwd
+     * @apiDescription 根据手机号修改密码
+     * @apiParam (请求参数) {String} userId
+     * @apiParam (请求参数) {String} mobile
+     * @apiParam (请求参数) {String} newPwd
+     * @apiParamExample 请求参数示例
+     * newPwd=1234&mobile=13800000000&userId=20262010000
+     * @apiSuccess (响应结果) {Object} response
+     * @apiSuccessExample 响应结果示例
+     * {
+     *     "msg": "手机号不正确",
+     *     "code": 500
+     * }
+     * {
+     *     "msg": "用户不存在",
+     *     "code": 500
+     * }
+     */
+    @RequestMapping(value = "/update_pwd", method = RequestMethod.POST)
+    public AjaxResult updatePwd(@RequestParam String userId,
+                                @RequestParam String mobile,
+                                @RequestParam String newPwd) {
+        Optional<User> optUser = userService.retrieve(userId);
+        if (optUser.isPresent()) {
+            User u = optUser.get();
+            if (StringUtils.isNotNull(u.getMobile()) && u.getMobile().equals(mobile)) {
+                u.setPwd(newPwd);
+                return AjaxResult.success(userService.update(u));
+            } else {
+                return AjaxResult.error("手机号不正确");
+            }
+        }
+        return AjaxResult.error("用户不存在");
     }
 }

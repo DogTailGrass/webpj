@@ -17,7 +17,7 @@ public class NoticeController {
     private NoticeService noticeService;
 
     /**
-     * @api {GET} /notice/get getAll
+     * @api {GET} /notice/get_all getAll
      * @apiVersion 1.0.0
      * @apiGroup 公告
      * @apiName getAll
@@ -99,5 +99,25 @@ public class NoticeController {
         return AjaxResult.success(noticeService.update(notice));
     }
 
+    /**
+     * @api {POST} /notice/delete delete
+     * @apiVersion 1.0.0
+     * @apiGroup 公告
+     * @apiName delete
+     * @apiDescription 删除公告
+     * @apiParam (请求参数) {Number} id
+     * @apiParamExample 请求参数示例
+     * id=1
+     * @apiSuccess (响应结果) {Object} response
+     * @apiSuccessExample 响应结果示例
+     * {}
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public AjaxResult delete(@RequestParam Integer id) {
+        Notice notice = new Notice();
+        notice.setId(id);
+        notice.setStatus(0);
+        return AjaxResult.success(noticeService.update(notice));
+    }
 
 }

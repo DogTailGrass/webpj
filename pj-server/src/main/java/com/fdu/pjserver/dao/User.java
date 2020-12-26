@@ -14,6 +14,8 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @DynamicUpdate
+@Table(name = "user")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public class User {
     /**
@@ -31,6 +33,11 @@ public class User {
      * 密码
      */
     private String pwd;
+
+    /**
+     * 手机号
+     */
+    private String mobile;
 
     /**
      * 状态（0正常 1删除）

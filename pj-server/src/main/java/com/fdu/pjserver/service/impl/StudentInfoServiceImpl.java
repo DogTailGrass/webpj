@@ -32,4 +32,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     public List<StudentInfo> retrieveAll() {
         return studentInfoDAO.findAll();
     }
+
+    public List<StudentInfo> retrieveAllValid() {
+        return studentInfoDAO.findAllValid();
+    }
 }

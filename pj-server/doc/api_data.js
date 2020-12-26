@@ -79,8 +79,59 @@ define({ "api": [
     "groupTitle": "公告"
   },
   {
+    "type": "POST",
+    "url": "/notice/delete",
+    "title": "delete",
+    "version": "1.0.0",
+    "group": "公告",
+    "name": "delete",
+    "description": "<p>删除公告</p>",
+    "parameter": {
+      "fields": {
+        "请求参数": [
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "请求参数示例",
+          "content": "id=1",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "响应结果": [
+          {
+            "group": "响应结果",
+            "type": "Object",
+            "optional": false,
+            "field": "response",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "响应结果示例",
+          "content": "{}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/main/java/com/fdu/pjserver/controller/NoticeController.java",
+    "groupTitle": "公告"
+  },
+  {
     "type": "GET",
-    "url": "/notice/get",
+    "url": "/notice/get_all",
     "title": "getAll",
     "version": "1.0.0",
     "group": "公告",
@@ -506,6 +557,13 @@ define({ "api": [
             "group": "请求参数",
             "type": "String",
             "optional": false,
+            "field": "mobile",
+            "description": "<p>手机号</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": false,
             "field": "pwd",
             "description": "<p>密码</p>"
           }
@@ -799,6 +857,71 @@ define({ "api": [
     "groupTitle": "用户"
   },
   {
+    "type": "GET",
+    "url": "/user/update_pwd",
+    "title": "updatePwd",
+    "version": "1.0.0",
+    "group": "用户",
+    "name": "updatePwd",
+    "description": "<p>根据手机号修改密码</p>",
+    "parameter": {
+      "fields": {
+        "请求参数": [
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": false,
+            "field": "userId",
+            "description": ""
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": false,
+            "field": "mobile",
+            "description": ""
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": false,
+            "field": "newPwd",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "请求参数示例",
+          "content": "newPwd=1234&mobile=13800000000&userId=20262010000",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "响应结果": [
+          {
+            "group": "响应结果",
+            "type": "Object",
+            "optional": false,
+            "field": "response",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "响应结果示例",
+          "content": "{\n    \"msg\": \"手机号不正确\",\n    \"code\": 500\n}\n{\n    \"msg\": \"用户不存在\",\n    \"code\": 500\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/main/java/com/fdu/pjserver/controller/UserController.java",
+    "groupTitle": "用户"
+  },
+  {
     "type": "POST",
     "url": "/report/add",
     "title": "add",
@@ -906,13 +1029,33 @@ define({ "api": [
     "groupTitle": "疫情上报数据"
   },
   {
-    "type": "GET",
-    "url": "/report/get_reports",
-    "title": "getReports",
+    "type": "POST",
+    "url": "/report/get_reports_by_date",
+    "title": "getReportsByDate",
     "version": "1.0.0",
     "group": "疫情上报数据",
-    "name": "getReports",
-    "description": "<p>获取所有疫情上报数据</p>",
+    "name": "getReportsByDate",
+    "description": "<p>获取某天学生疫情上报数据，并返回未上报用户信息</p>",
+    "parameter": {
+      "fields": {
+        "请求参数": [
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": false,
+            "field": "reportDate",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "请求参数示例",
+          "content": "reportDate=2020/12/01",
+          "type": "json"
+        }
+      ]
+    },
     "success": {
       "fields": {
         "响应结果": [
@@ -928,7 +1071,7 @@ define({ "api": [
       "examples": [
         {
           "title": "响应结果示例",
-          "content": "{}",
+          "content": "{\n    \"msg\": \"操作成功\",\n    \"code\": 200,\n    \"data\": {\n        \"not_report_users\": [\n            {\n                \"userId\": \"20262010001\",\n                \"userName\": \"张三\",\n                \"pwd\": \"123\",\n                \"status\": 1,\n                \"createTime\": \"2020-12-22T01:30:51.000+08:00\",\n                \"createBy\": \"System\",\n                \"updateTime\": \"2020-12-22T01:30:51.000+08:00\",\n                \"updateBy\": \"System\",\n                \"mobile\": \"13800000000\",\n                \"department\": \"软件学院\",\n                \"degree\": \"研究生\",\n                \"fullTime\": 0,\n                \"counselorName\": \"李老师\",\n                \"graduation\": 1,\n                \"address\": \"上海市XX区XX路\"\n            }\n        ],\n        \"report\": [\n            {\n                \"userId\": \"20262010002\",\n                \"reportDate\": \"2020-12-01T00:00:00.000+08:00\",\n                \"hasFever\": 1,\n                \"atSchool\": 1,\n                \"temperatureRange\": 0,\n                \"hasCough\": 1,\n                \"atIsolation\": 1,\n                \"hasRiskContact\": 1,\n                \"hasInfectedContact\": 1,\n                \"userName\": \"李四\"\n            }\n        ]\n    }\n}",
           "type": "json"
         }
       ]

@@ -14,6 +14,7 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@Table(name = "notice")
 @DynamicUpdate
 public class Notice {
     @Id

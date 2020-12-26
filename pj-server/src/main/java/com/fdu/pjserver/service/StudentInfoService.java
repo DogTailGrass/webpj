@@ -15,4 +15,6 @@ public interface StudentInfoService {
     Optional<StudentInfo> retrieve(String userId);
 
     List<StudentInfo> retrieveAll();
+
+    List<StudentInfo> retrieveAllValid();
 }

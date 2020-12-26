@@ -1,25 +1,16 @@
 package com.fdu.pjserver.dao;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 import java.util.Date;
 
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@DynamicUpdate
 @Data
-@Table(name = "daily_report")
-@IdClass(DailyReportPK.class)
-public class DailyReport {
+public class UserDailyReport extends DailyReport {
 
-    /**
-     * 学生用户id
-     */
-    @Id
     private String userId;
+
+    private String userName;
 
     /**
      * 上报日期
@@ -65,4 +56,16 @@ public class DailyReport {
      */
     private Integer hasInfectedContact;
 
+    public UserDailyReport(String userId, String userName, Date reportDate, Integer hasFever, Integer atSchool, Integer temperatureRange, Integer hasCough, Integer atIsolation, Integer hasRiskContact, Integer hasInfectedContact) {
+        this.userId = userId;
+        this.userName = userName;
+        this.reportDate = reportDate;
+        this.hasFever = hasFever;
+        this.atSchool = atSchool;
+        this.temperatureRange = temperatureRange;
+        this.hasCough = hasCough;
+        this.atIsolation = atIsolation;
+        this.hasRiskContact = hasRiskContact;
+        this.hasInfectedContact = hasInfectedContact;
+    }
 }

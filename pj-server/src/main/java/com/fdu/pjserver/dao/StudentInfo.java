@@ -11,13 +11,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@Table(name="student_info")
 @DynamicUpdate
-public class StudentInfo {
+public class StudentInfo extends User{
     /**
      * 用户ID（学号）
      */
