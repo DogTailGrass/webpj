@@ -2,11 +2,11 @@
   <div class="login-container">
     <el-form ref="form" :rules="rules" :model="form" label-width="80px" class="login-form">
       <h2 class="login-title">管理员系统</h2>
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username"></el-input>
+      <el-form-item label="用户名" prop="userId">
+        <el-input v-model="form.userId"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" show-password></el-input>
+      <el-form-item label="密码" prop="pwd">
+        <el-input v-model="form.pwd" show-password></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -16,22 +16,37 @@
   </div>
 </template>
 <script>
-import {adminlogin, getAdminInfo} from '@/api/adminapi/login'
+import {adminlogin} from '@/api/adminapi/login'
 export default {
   data() {
     return {
+      dialogVisible:false,
       form: {
-        username: "",
-        password: ""
+        userId: "",
+        pwd: ""
       },
       rules:{
-          username:[
-              {required: true, message:"用户名不能为空", trigger: 'blur'},
-              {min: 3, max: 10, message: "用户名3-10位", trigger: 'blur'}
+          userId:[
+              {required: true, message:"用户名不能为空", trigger: 'blur'}
           ],
-          password:[
-              {required: true, message:"密码不能为空", trigger: 'blur'},
-              {min: 3, max: 10, message: "密码3-10位", trigger: 'blur'}
+          pwd:[
+              {required: true, message:"密码不能为空", trigger: 'blur'}
+          ]
+      },
+      resetpasswordform:{
+        username: "",
+        number: "",
+        phone: "",
+      },
+      resetpasswordrules:{
+        username:[
+              {required: true, message:"用户名不能为空", trigger: 'blur'}
+          ],
+          number:[
+              {required: true, message:"学工号不能为空", trigger: 'blur'},
+          ],
+          phone:[
+              {required: true, message:"手机号不能为空", trigger: 'blur'},
           ]
       }
     };
@@ -41,60 +56,39 @@ export default {
       this.$refs[formName].validate(valid => {
       //console.log(valid)
       if (valid) {
-        adminlogin(this.form.username, this.form.password).then(response => {
-        console.log(valid);
-        const res = response.data;
-        console.log(res, res.flag, res.data.token, res.message);
-        if (res.flag) {
-          // 验证成功，通过token获取用户信息
-          getAdminInfo(res.data.token).then(response => {
-            const res = response.data;
-            if (res.flag) {
-            // 验证成功，通过token获取用户信息
-              getStudentInfo(res.token).then(response => {
-              const resUser = response.data;
-              if (resUser.flag) {
-              //获取用户信息并保存
-                sessionStorage.setItem("user-token", res.data.token);
-                sessionStorage.setItem("useraddr",resUser.addr);
-                sessionStorage.setItem("userphone",resUser.phone);
-                sessionStorage.setItem("username", this.form.username);
-              // 前往首页
-              this.$router.push("/adminhomepage");
-              } 
-              else {
-              // 使用elementui的消息提示
-                this.$message({
-                  message: resUser.message,
-                  type: "warning"
-                });
-              }
-              });
-            }
-          })
+        adminlogin(this.form.userId, this.form.pwd).then(response => {
+          console.log(response);
+          let res = response.data;
+          console.log(res.code);
+        if (res.code === 200) {
+          // 验证成功，获取用户id
+          //let res = response.data;
+          sessionStorage.setItem("user_id", res.data.userId);
+          sessionStorage.setItem("user_name", res.data.userName);
+          this.$router.push("/adminhomepage");
+          sessionStorage.setItem("login_status",1);
         }
-        else {
+        else{
             // 未通过，弹出警告
-            // 使用elementui的消息提示
-            this.$message({
-            message: res.message,
-            type: "warning"
-            });
+            alert("登录失败，请联系开发人员");
         }
         })
         .catch(() => {
-          console.log("failed");
-          //打桩
-          sessionStorage.setItem("user-token", "admin");
+          alert("failed");
+          sessionStorage.setItem("login_status",1);
           this.$router.push("/adminhomepage");
+          //console.log("failed");
+          //打桩
+          //sessionStorage.setItem("user_id", "123");              
+          //this.$router.push("/studenthomepage");
         });
       } 
       else {
         console.log('验证失败');
         return false;
       }
-    });
-       }
+      });
+   },
   }
 };
 </script>

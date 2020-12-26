@@ -8,15 +8,14 @@
       <el-form-item label="确认密码" prop="checkPass">
         <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-      </el-form-item>
     </el-form>
+    <div v-if="checkpasssuccess">
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+    </div>
 </div>
 </template>
 <script>
-import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
+import {modifyPwd} from '@/api/studentapi/changepassword'
     export default {
     data() {
       var validatePass = (rule, value, callback) => {
@@ -36,6 +35,7 @@ import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
+          this.checkpasssuccess = true;
         }
       };
       return {
@@ -43,6 +43,7 @@ import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
           pass: '',
           checkPass: ''
         },
+        checkpasssuccess:false,
         rules: {
           pass: [
             { validator: validatePass, trigger: 'blur' }
@@ -54,22 +55,37 @@ import {pushpersonalinfo} from '@/api/studentapi/pushpersonalinfo'
       };
     },
     created(){
-
+      if(sessionStorage.getItem("login_status") !== "1")
+      {
+          this.$router.push("/studentlogin");
+          console.log("登录状态有错误");
+          return;
+      }
     },
     methods: {    
       submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
+          this.$refs[formName].validate((valid) => {
+          if (valid) 
+          {
+            modifyPwd(sessionStorage.getItem("user_id"),this.ruleForm.pass).then(response => {
+              const res = response.data;
+              console.log(response);
+              if(res.code === 200){
+                  alert('修改成功!');
+              }
+            })
+            .catch(() => {
+                alert('修改失败!');
+                console.log("fail");
+            });
+            
+          } 
+          else {
             console.log('error submit!!');
             return false;
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
     }
   }
 </script>

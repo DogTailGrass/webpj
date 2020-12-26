@@ -14,7 +14,7 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 
 export default {
-  props:['ComponentData'],
+  props:['ComponentData','title'],
     //props:{
     //    ComponentData:{
     //        type: Array,
@@ -54,7 +54,7 @@ export default {
         },
           
         legend: {               //设置区分（哪条线属于什么）
-          data:['未上报人数']
+          data:[this.title]
         },
 
         color: ['#FA6F53'],       //设置区分（每条线是什么颜色，和 legend 一一对应）
@@ -91,7 +91,7 @@ export default {
         },
         series: [
           {
-            name: '未上报人数',
+            name: this.title,
             data: this.ComponentData,
             type: 'line',
             lineStyle: {

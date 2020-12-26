@@ -4,11 +4,7 @@ import request from '@/utils/request'
 export function inforeport(user_id,report)
 {
     return request({
-        url: '/api/user/inforeport',
+        url: `/api/student/report?userId=${user_id}&currentLocation=SH&hasFever=${report.isfever}&hasLeave=${report.isinschool}&todayBodyTemperature=${report.temperature}&hasContact=${report.iscontantpatient}&isolationPeriod=${report.isinquarantine}&remarks=None`,
         method: 'post',
-        data: {
-            user_id:user_id,
-            report:report
-        }
     })
 }

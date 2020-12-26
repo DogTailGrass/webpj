@@ -2,11 +2,11 @@
   <div class="login-container">
     <el-form ref="form" :rules="rules" :model="form" label-width="80px" class="login-form">
       <h2 class="login-title">学生系统</h2>
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="form.username"></el-input>
+      <el-form-item label="用户名" prop="userId">
+        <el-input v-model="form.userId"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" show-password></el-input>
+      <el-form-item label="密码" prop="pwd">
+        <el-input v-model="form.pwd" show-password></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -15,8 +15,8 @@
       </el-form-item>
     </el-form>
 
-    <el-dialog title="申请重置密码" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
-      <el-form :rules="resetpasswordrules" :model="resetpasswordform" label-width="80px">
+    <el-dialog title="重置密码" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">
+      <el-form :rules="resetpasswordrules" :model="resetpasswordform" label-width="120px">
       <el-form-item label="姓名" prop="username">
         <el-input v-model="resetpasswordform.username"></el-input>
       </el-form-item>
@@ -26,29 +26,48 @@
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="resetpasswordform.phone"></el-input>
       </el-form-item>
+      <el-form-item label="新密码" prop="pwd">
+        <el-input v-model="resetpasswordform.pwd" show-password></el-input>
+      </el-form-item>
+      <el-form-item label="确认新密码" prop="confimpwd">
+        <el-input v-model="resetpasswordform.confimpwd" show-password></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click.native="resetpasswordcancel">取 消</el-button>
-      <el-button type="primary" @click.native="applyresetpassword">确 定</el-button>
+      <el-button type="primary" :disabled="checkpasssuccess" @click.native="applyresetpassword" >确 定</el-button>
     </span>
   </el-dialog>
   </div>
 </template>
 <script>
-import {studentlogin, getStudentInfo} from '@/api/studentapi/login'
+import {studentlogin, getStudentInfo,resetpwd} from '@/api/studentapi/login'
 export default {
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } 
+      else if (value !== this.resetpasswordform.pwd) {
+        callback(new Error('两次输入密码不一致!'));
+      } 
+      else {
+        this.checkpasssuccess = false;
+          callback();
+      }
+    };
     return {
       dialogVisible:false,
+      checkpasssuccess:true,
       form: {
-        username: "",
-        password: ""
+        userId: "",
+        pwd: ""
       },
       rules:{
-          username:[
+          userId:[
               {required: true, message:"用户名不能为空", trigger: 'blur'}
           ],
-          password:[
+          pwd:[
               {required: true, message:"密码不能为空", trigger: 'blur'}
           ]
       },
@@ -56,6 +75,7 @@ export default {
         username: "",
         number: "",
         phone: "",
+        pwd:"",
       },
       resetpasswordrules:{
         username:[
@@ -66,7 +86,13 @@ export default {
           ],
           phone:[
               {required: true, message:"手机号不能为空", trigger: 'blur'},
-          ]
+          ],
+          pwd:[
+              {required: true, message:"密码不能为空", trigger: 'blur'},
+          ],
+          confimpwd:[
+              {required: true, validator: validatePass2, trigger: 'blur'},
+          ],
       }
     };
   },
@@ -75,22 +101,29 @@ export default {
       this.$refs[formName].validate(valid => {
       //console.log(valid)
       if (valid) {
-        studentlogin(this.form.username, this.form.password).then(response => {
-        if (response.flag) {
-          // 验证成功，获取用户id
+        studentlogin(this.form.userId,this.form.pwd).then(response => {
+          console.log(response);
           let res = response.data;
-          sessionStorage.setItem("user_id", res.user_id);
+          console.log(res.code);
+        if (res.code === 200) {
+          // 验证成功，获取用户id
+          //let res = response.data;
+          sessionStorage.setItem("user_id", res.data.userId);
+          sessionStorage.setItem("user_name", res.data.userName);
+          this.$router.push("/studenthomepage");
+          sessionStorage.setItem("login_status",1);
         }
-        else {
+        else{
             // 未通过，弹出警告
             alert("登录失败，请联系系统管理员");
         }
         })
         .catch(() => {
-          console.log("failed");
+          alert("failed");
+          //console.log("failed");
           //打桩
-          sessionStorage.setItem("user_id", "123");              
-          this.$router.push("/studenthomepage");
+          //sessionStorage.setItem("user_id", "123");              
+          //this.$router.push("/studenthomepage");
         });
       } 
       else {
@@ -105,7 +138,26 @@ export default {
     },
     applyresetpassword(){
       console.log("applyresetpassword");
-      this.dialogVisible = false;
+      if(this.resetpasswordform.number === '' || this.resetpasswordform.phone === '' || this.resetpasswordform.pwd==='')
+          alert('请将表项填写完整!');
+      else
+      {
+        this.dialogVisible = false;
+        resetpwd(this.resetpasswordform).then(response => {
+          console.log(response);
+          let res = response.data;
+          console.log(res.code);
+          if (res.code === 200) {
+          }
+          else{
+              // 未通过，弹出警告
+              alert("登录失败，请联系系统管理员");
+          }
+          })
+          .catch(() => {
+            alert("failed");
+          });
+      }
     },
     resetpasswordcancel(){
       this.dialogVisible = false;

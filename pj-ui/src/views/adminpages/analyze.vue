@@ -17,14 +17,28 @@
       </el-select>
         <el-button type="primary" @click="serach">查询</el-button>
     </div>
-    
+
+    <div v-if="showpie">
     <Pie 
       :ComponentData='piedata'
       @click_pie="click_pie">
     </Pie>
     <div class = "li" >
-      <li v-if="showname1">{{date_y_m_d}}{{piedata.name1}}人数统计</li>
-      <li v-if="showname2">{{date_y_m_d}}{{piedata.name2}}人数统计</li>
+      <li v-if="showname1">{{date_y_m_d}}{{piedata.name1}}人数统计(共{{tableData.length}}人)</li>
+      <li v-if="showname2">{{date_y_m_d}}{{piedata.name2}}人数统计(共{{tableData.length}}人)</li>
+    </div>
+    </div>
+
+    <div v-if="showtreblepie">
+    <TreblePie 
+      :ComponentData='treblepiedata'
+      @click_pie="click_pie">
+    </TreblePie>
+    <div class = "li" >
+      <li v-if="showname1">{{date_y_m_d}}  体温：{{treblepiedata.name1}}人数统计(共{{tableData.length}}人)</li>
+      <li v-if="showname2">{{date_y_m_d}}  体温：{{treblepiedata.name2}}人数统计(共{{tableData.length}}人)</li>
+      <li v-if="showname3">{{date_y_m_d}}  体温：{{treblepiedata.name3}}人数统计(共{{tableData.length}}人)</li>
+    </div>
     </div>
 
     <div v-if="showtable">
@@ -34,13 +48,6 @@
     <br>
     <el-button type="primary" @click="exportdate()">表格导出Excel</el-button>
     </div>
-  
-    <div class = "li" >
-      <li>近一周{{piedata.name2}}人数变化趋势</li>
-    </div>
-    <ChartLine 
-      :ComponentData='chartlinedata'>
-    </ChartLine>
   </div>
 </template>
 
@@ -53,8 +60,8 @@ require('echarts/lib/component/title')
 
 
 import {getReportInfo} from '@/api/adminapi/getreportinfo'
-import ChartLine from '@/components/chartline'
 import Pie from '@/components/pie'
+import TreblePie from '@/components/treblepie'
 import Form from '@/components/notsubmitedform'
 import { export2Excel } from '@/utils/excel.js'
 export default {
@@ -65,19 +72,28 @@ export default {
       showtable:false,
       showname1:false,
       showname2:false,
+      showname3:false,
+      showpie:false,
+      showtreblepie:false,
       date_y_m_d: '',  //页面显示
 
-      chartlinedata:[],
       tableData: [],
       piedata:{
         hassubmited:0,
         notsubmited:0
       },
-      options: [{value: '0', label: '未按时上报'}, 
-                {value: '1', label: '不在上海本地'},
-                {value: '2', label: '身体不适'},
-                {value: '3', label: '处于中高风险地区'},
-                {value: '4', label: '处于隔离期'},
+      treblepiedata:{
+        normol:0,
+        middle:0,
+        high:0,
+      },
+      options: [{value: '0', label: '未按时上报(下午五点)'}, 
+                {value: '1', label: '是否在校'},
+                {value: '2', label: '体温状况'},
+                {value: '3', label: '是否咳嗽乏力'},
+                {value: '4', label: '是否与国内中高风险地区人员有较为密切的接触'},
+                {value: '5', label: '是否处于隔离期'},
+                {value: '6', label: '是否接触确诊/疑似人群'},
               ],
       project:'0',
       pickerOptions: {
@@ -125,21 +141,27 @@ export default {
       {
         this.getname1table();
       }
-      else if(index == 1)
+      else if(index === 1)
       {
         this.getname2table();
+      }
+      else if(index === 2)
+      {
+        this.getname3table();
       }
       this.showtable = true;
     },
     getname1table() {
         this.showname1=true;
         this.showname2=false;
+        this.showname3=false;
         let num = 10;
         let tempdata  = [];
         for(let i = 0;i<num;i++)
         {
           tempdata[i] = new Object();
-          tempdata[i].date = this.nowDate;
+          tempdata[i].index = i+1;
+          tempdata[i].date = this.date_y_m_d;
           tempdata[i].name = '郑海关';
           tempdata[i].number = '20262010061';
         }
@@ -148,13 +170,31 @@ export default {
     getname2table(){
         this.showname2=true;
         this.showname1=false;
+        this.showname3=false;
         let num = 10;
         let tempdata  = [];
         for(let i = 0;i<num;i++)
         {
           tempdata[i] = new Object();
-          tempdata[i].date = this.nowDate;
+          tempdata[i].index = i+1;
+          tempdata[i].date = this.date_y_m_d;
           tempdata[i].name = '洪峰';
+          tempdata[i].number = '20262010061';
+        }
+        this.tableData = tempdata;
+    },
+    getname3table(){
+        this.showname2=false;
+        this.showname1=false;
+        this.showname3=true;
+        let num = 10;
+        let tempdata  = [];
+        for(let i = 0;i<num;i++)
+        {
+          tempdata[i] = new Object();
+          tempdata[i].index = i+1;
+          tempdata[i].date = this.date_y_m_d;
+          tempdata[i].name = '洪峰02';
           tempdata[i].number = '20262010061';
         }
         this.tableData = tempdata;
@@ -165,6 +205,13 @@ export default {
 
     //获取所选日期、项目数据
     getPjData() {
+      [
+                {value: '3', label: '体温状况'},
+                {value: '4', label: '是否咳嗽乏力'},
+                {value: '5', label: '是否与国内中高风险地区人员有较为密切的接触'},
+                {value: '6', label: '是否处于隔离期'},
+                {value: '7', label: '是否接触确诊/疑似人群'},
+              ],
       //this.getcurrenttime();      
       console.log(this.date);
       console.log(this.date_y_m_d);
@@ -180,53 +227,77 @@ export default {
       switch (this.project)
       {
         case '0':
+          this.showpie = true;
+          this.showtreblepie = false;
           this.piedata.title = `${this.date_y_m_d}未按时上报人数统计`;
           this.piedata.name1 = '已按时上报';
           this.piedata.name2 = '未按时上报';
           this.piedata.data1 = 40;
           this.piedata.data2 = 30;
           break;
-        
-        case '1':
-          this.piedata.title = `${this.date_y_m_d}不在上海本地人数统计`;
-          this.piedata.name1 = '在上海本地';
-          this.piedata.name2 = '不在上海本地';
-          this.piedata.data1 = 60;
-          this.piedata.data2 = 10;
-        break;
 
-        case '2':
-          this.piedata.title = `${this.date_y_m_d}身体不适人数统计`;
-          this.piedata.name1 = '健康状况正常';
-          this.piedata.name2 = '身体不适';
+        case '1':
+          this.showpie = true;
+          this.showtreblepie = false;
+          this.piedata.title = `${this.date_y_m_d}是否在校人数统计`;
+          this.piedata.name1 = '在校';
+          this.piedata.name2 = '不在校';
           this.piedata.data1 = 65;
           this.piedata.data2 = 5;
         break;
 
+        case '2':
+          this.showpie = false;
+          this.showtreblepie = true;
+          this.treblepiedata.title = `${this.date_y_m_d}是否发烧人数统计`;
+          this.treblepiedata.name1 = '37.2度以下(体温正常)';
+          this.treblepiedata.name2 = '37.8-38';
+          this.treblepiedata.name3 = '38度以上';
+          this.treblepiedata.data1 = 60;
+          this.treblepiedata.data2 = 10;
+          this.treblepiedata.data3 = 10;
+        break;
+
         case '3':
-          this.piedata.title = `${this.date_y_m_d}处于中高风险地区人数统计`;
-          this.piedata.name1 = '不在中高风险地区';
-          this.piedata.name2 = '处于中高风险地区';
+          this.showpie = true;
+          this.showtreblepie = false;
+          this.piedata.title = `${this.date_y_m_d}是否咳嗽人数统计`;
+          this.piedata.name1 = '咳嗽';
+          this.piedata.name2 = '不咳嗽';
           this.piedata.data1 = 50;
           this.piedata.data2 = 20;
         break;
 
         case '4':
-          this.piedata.title = `${this.date_y_m_d}处于隔离期人数统计`;
-          this.piedata.name1 = '不在隔离期';
-          this.piedata.name2 = '处于隔离期';
+          this.showpie = true;
+          this.showtreblepie = false;
+          this.piedata.title = `${this.date_y_m_d}是否与国内中高风险地区人员有较为密切的接触人数统计`;
+          this.piedata.name1 = '有密切接触';
+          this.piedata.name2 = '无密切接触';
           this.piedata.data1 = 69;
           this.piedata.data2 = 11;
         break;
+
+        case '5':
+          this.showpie = true;
+          this.showtreblepie = false;
+          this.piedata.title = `${this.date_y_m_d}是否处在隔离期人数统计`;
+          this.piedata.name1 = '在隔离期内';
+          this.piedata.name2 = '不在在隔离期内';
+          this.piedata.data1 = 61;
+          this.piedata.data2 = 18;
+        break;
+
+        case '6':
+          this.showpie = true;
+          this.showtreblepie = false;
+          this.piedata.title = `${this.date_y_m_d}是否接触确认/疑似病例人数统计`;
+          this.piedata.name1 = '接触过';
+          this.piedata.name2 = '没有接触过';
+          this.piedata.data1 = 70;
+          this.piedata.data2 = 3;
+        break;
       }
-      this.chartlinedata = new Array();
-      this.chartlinedata[0] = 10;
-      this.chartlinedata[1] = 20;
-      this.chartlinedata[2] = 30;
-      this.chartlinedata[3] = 15;
-      this.chartlinedata[4] = 18;
-      this.chartlinedata[5] = 50;
-      this.chartlinedata[6] = 20;
     },
     serach(){
       this.showname1=false;
@@ -237,11 +308,13 @@ export default {
     exportdate(){
       if(this.showname1 === true)
         export2Excel(this.columns,this.tableData,`${this.date_y_m_d}${this.piedata.name1}名单`);
-      else
+      else if(this.showname2 === true)
         export2Excel(this.columns,this.tableData,`${this.date_y_m_d}${this.piedata.name2}名单`);
+      else
+        export2Excel(this.columns,this.tableData,`${this.date_y_m_d}${this.piedata.name3}名单`);
     }
   },
-  components: { ChartLine,Pie,Form }
+  components: { Pie,Form,TreblePie }
 }
 </script>
 

@@ -31,7 +31,7 @@
       width="100">
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="text" size="medium">查看</el-button>
-        <el-button @click="handledelete(scope.row)" type="text" size="medium">删除</el-button>
+        <el-button @click="open(scope.row)" type="text" size="medium">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -51,6 +51,8 @@ import {get_all_announcement} from '@/api/studentapi/getannouncement'
       return {
         tableData:[],
         dialogVisible:false,
+        delete_confim_dialogVisible:false,
+        delete_confim:false,
         announcement:'',
         publishtime:''
       };
@@ -128,12 +130,29 @@ import {get_all_announcement} from '@/api/studentapi/getannouncement'
             console.log(this.tableData[i]);
             this.tableData[i].idx = i +1;
         }
-        
-        alert("删除成功");
       },
       handledialogconfim(){
         this.dialogVisible = false;
-      }
+      },
+      open(row) {
+        this.$confirm('确认删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          this.handledelete(row);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+      
     }
   }
 

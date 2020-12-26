@@ -94,6 +94,11 @@ export default new Router({
           component: () => import ('@/views/adminpages/announce.vue')
         },
         {
+          path: 'trend',
+          name: 'trend',
+          component: () => import ('@/views/adminpages/trend.vue')
+        },
+        {
           path: 'checkannounce',
           name: 'checkannounce',
           component: () => import ('@/views/adminpages/checkannouncement.vue')

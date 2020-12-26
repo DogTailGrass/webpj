@@ -6,8 +6,8 @@
       @click_pie="click_pie">
     </Pie>
     <div class = "li" >
-      <li v-if="shownotsubmit">未按时上报人员名单</li>
-      <li v-if="showsubmit">按时上报人员名单</li>
+      <li v-if="shownotsubmit">未上报人员名单(共{{tableData.length}}人)</li>
+      <li v-if="showsubmit">已上报人员名单(共{{tableData.length}}人)</li>
     </div>
 
     <div v-if="showtable">
@@ -41,6 +41,7 @@ export default {
       shownotsubmit:false,
       showsubmit:false,
       tableData: [],
+      nowDate:'',
       piedata:{
         hassubmited:0,
         notsubmited:0
@@ -50,11 +51,19 @@ export default {
   },
   created(){
       this.getcurrentData();
+      this.getcurrenttime();
   },
   mounted(){
     //this.getcurrentData();
   },
   methods:{
+    getcurrenttime(){
+      let date = new Date();
+      let year = date.getFullYear(); // 年
+      let month = date.getMonth() + 1; // 月
+      let day = date.getDate(); // 日
+      this.nowDate = `${year}/${month}/${day}`;
+    },
     //获取当天的数据
     getcurrentData() {
       getReportInfo(sessionStorage.getItem("user_id")).then(response => {
@@ -66,11 +75,11 @@ export default {
       });
 
       this.piedata = new Object();
-      this.piedata.title = '已按时上报/未按时上报人数统计';
-      this.piedata.name1 = '已按时上报';
-      this.piedata.name2 = '未按时上报';
-      this.piedata.data1 = 46;
-      this.piedata.data2 = 32;
+      this.piedata.title = '已上报/未上报人数统计';
+      this.piedata.name1 = '已上报';
+      this.piedata.name2 = '未上报';
+      this.piedata.data1 = 55;
+      this.piedata.data2 = 22;
       this.notsubmitedcount = this.piedata.data2;
     },
    
@@ -94,6 +103,7 @@ export default {
         for(let i = 0;i<num;i++)
         {
           tempdata[i] = new Object();
+          tempdata[i].index = i+1;
           tempdata[i].date = this.nowDate;
           tempdata[i].name = '郑海关';
           tempdata[i].number = '20262010061';
@@ -108,6 +118,7 @@ export default {
         for(let i = 0;i<num;i++)
         {
           tempdata[i] = new Object();
+          tempdata[i].index = i+1;
           tempdata[i].date = this.nowDate;
           tempdata[i].name = '洪峰';
           tempdata[i].number = '20262010061';
@@ -117,9 +128,9 @@ export default {
     exportdate(){
       console.log("expertdate");
       if(this.shownotsubmit === true)
-        export2Excel(this.columns,this.tableData,'未按时上报人员名单');
+        export2Excel(this.columns,this.tableData,'未上报人员名单');
       else
-        export2Excel(this.columns,this.tableData,'已按时上报人员名单');
+        export2Excel(this.columns,this.tableData,'已上报人员名单');
     }
   },
   components: { Pie,Form }
