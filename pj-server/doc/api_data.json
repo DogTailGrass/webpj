@@ -1030,6 +1030,129 @@
   },
   {
     "type": "POST",
+    "url": "/report/range_abnormal_analysis",
+    "title": "analysisDateRank",
+    "version": "1.0.0",
+    "group": "疫情上报数据",
+    "name": "analysisDateRank",
+    "description": "<p>日期区间内异常数据</p>",
+    "parameter": {
+      "fields": {
+        "请求参数": [
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": false,
+            "field": "oldDate",
+            "description": "<p>起始日</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": false,
+            "field": "newDate",
+            "description": "<p>结束日</p>"
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "请求参数示例",
+          "content": "oldDate=2020/12/01&type=cough&newDate=2020/12/23",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "响应结果": [
+          {
+            "group": "响应结果",
+            "type": "Object",
+            "optional": false,
+            "field": "response",
+            "description": "<p>取值区间on_time,at_school,temp,cough,isolation,risk_cont,infected_cont</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "响应结果示例",
+          "content": "{\n    \"msg\": \"操作成功\",\n    \"code\": 200,\n    \"data\": [\n        {\n            \"2020-12-01\": 1\n        },\n        {\n            \"2020-12-23\": 1\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/main/java/com/fdu/pjserver/controller/DailyReportController.java",
+    "groupTitle": "疫情上报数据"
+  },
+  {
+    "type": "POST",
+    "url": "/report/day_analysis",
+    "title": "analysisDay",
+    "version": "1.0.0",
+    "group": "疫情上报数据",
+    "name": "analysisDay",
+    "description": "<p>当日数据分析接口</p>",
+    "parameter": {
+      "fields": {
+        "请求参数": [
+          {
+            "group": "请求参数",
+            "type": "Number",
+            "optional": false,
+            "field": "reportDate",
+            "description": ""
+          },
+          {
+            "group": "请求参数",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>取值区间on_time,at_school,temp,cough,isolation,risk_cont,infected_cont</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "请求参数示例",
+          "content": "reportDate=2020/12/23&type=isolation",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "响应结果": [
+          {
+            "group": "响应结果",
+            "type": "Object",
+            "optional": false,
+            "field": "response",
+            "description": "<p>data字段中一般为not_report_users,true,false三个字段，分别表示当日未上报、当前请求分析字段为1/0的数据。 如果type取值为temp，返回normal,mid,high三个字段表示体温的三个区间</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "响应结果示例",
+          "content": "{\n\"msg\": \"操作成功\",\n\"code\": 200,\n\"data\": {\n\"not_report_users\": [],\n\"true\": [\n{\n\"userId\": \"20262010002\",\n\"reportDate\": \"2020-12-23T00:00:00.000+08:00\",\n\"hasFever\": 1,\n\"atSchool\": 1,\n\"temperatureRange\": 0,\n\"hasCough\": 1,\n\"atIsolation\": 1,\n\"hasRiskContact\": 1,\n\"hasInfectedContact\": 1,\n\"userName\": \"李四\"\n}\n],\n\"false\": [\n{\n\"userId\": \"20262010001\",\n\"reportDate\": \"2020-12-23T00:00:00.000+08:00\",\n\"hasFever\": 0,\n\"atSchool\": 0,\n\"temperatureRange\": 1,\n\"hasCough\": 0,\n\"atIsolation\": 0,\n\"hasRiskContact\": 0,\n\"hasInfectedContact\": 0,\n\"userName\": \"张三\"\n}\n]\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/main/java/com/fdu/pjserver/controller/DailyReportController.java",
+    "groupTitle": "疫情上报数据"
+  },
+  {
+    "type": "POST",
     "url": "/report/get_reports_by_date",
     "title": "getReportsByDate",
     "version": "1.0.0",
@@ -1071,7 +1194,7 @@
       "examples": [
         {
           "title": "响应结果示例",
-          "content": "{\n    \"msg\": \"操作成功\",\n    \"code\": 200,\n    \"data\": {\n        \"not_report_users\": [\n            {\n                \"userId\": \"20262010001\",\n                \"userName\": \"张三\",\n                \"pwd\": \"123\",\n                \"status\": 1,\n                \"createTime\": \"2020-12-22T01:30:51.000+08:00\",\n                \"createBy\": \"System\",\n                \"updateTime\": \"2020-12-22T01:30:51.000+08:00\",\n                \"updateBy\": \"System\",\n                \"mobile\": \"13800000000\",\n                \"department\": \"软件学院\",\n                \"degree\": \"研究生\",\n                \"fullTime\": 0,\n                \"counselorName\": \"李老师\",\n                \"graduation\": 1,\n                \"address\": \"上海市XX区XX路\"\n            }\n        ],\n        \"report\": [\n            {\n                \"userId\": \"20262010002\",\n                \"reportDate\": \"2020-12-01T00:00:00.000+08:00\",\n                \"hasFever\": 1,\n                \"atSchool\": 1,\n                \"temperatureRange\": 0,\n                \"hasCough\": 1,\n                \"atIsolation\": 1,\n                \"hasRiskContact\": 1,\n                \"hasInfectedContact\": 1,\n                \"userName\": \"李四\"\n            }\n        ]\n    }\n}",
+          "content": "{\n\"msg\": \"操作成功\",\n\"code\": 200,\n\"data\": {\n\"not_report_users\": [\n{\n\"userId\": \"20262010001\",\n\"userName\": \"张三\",\n\"pwd\": \"123\",\n\"status\": 1,\n\"createTime\": \"2020-12-22T01:30:51.000+08:00\",\n\"createBy\": \"System\",\n\"updateTime\": \"2020-12-22T01:30:51.000+08:00\",\n\"updateBy\": \"System\",\n\"mobile\": \"13800000000\",\n\"department\": \"软件学院\",\n\"degree\": \"研究生\",\n\"fullTime\": 0,\n\"counselorName\": \"李老师\",\n\"graduation\": 1,\n\"address\": \"上海市XX区XX路\"\n}\n],\n\"report\": [\n{\n\"userId\": \"20262010002\",\n\"reportDate\": \"2020-12-01T00:00:00.000+08:00\",\n\"hasFever\": 1,\n\"atSchool\": 1,\n\"temperatureRange\": 0,\n\"hasCough\": 1,\n\"atIsolation\": 1,\n\"hasRiskContact\": 1,\n\"hasInfectedContact\": 1,\n\"userName\": \"李四\"\n}\n]\n}\n}",
           "type": "json"
         }
       ]

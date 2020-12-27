@@ -41,4 +41,8 @@ public class DailyReportServiceImpl implements DailyReportService {
     public List<UserDailyReport> retrieveAllByDate(Date reportDate) {
         return dailyReportDAO.findAllReportByDate(reportDate);
     }
+
+    public List<UserDailyReport> retrieveAllBetweenDate(Date oldDate,Date newDate) {
+        return dailyReportDAO.findAllReportBetweenDate(oldDate,newDate);
+    }
 }

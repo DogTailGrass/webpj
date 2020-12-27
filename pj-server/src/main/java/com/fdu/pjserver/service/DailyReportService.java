@@ -21,4 +21,6 @@ public interface DailyReportService {
 
     List<UserDailyReport> retrieveAllByDate(Date reportDate);
 
+    List<UserDailyReport> retrieveAllBetweenDate(Date oldDate,Date newDate);
+
 }

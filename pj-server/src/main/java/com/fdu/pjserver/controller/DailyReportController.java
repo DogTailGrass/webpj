@@ -1,6 +1,7 @@
 package com.fdu.pjserver.controller;
 
 import com.fdu.pjserver.common.AjaxResult;
+import com.fdu.pjserver.common.utils.DateUtils;
 import com.fdu.pjserver.common.utils.StringUtils;
 import com.fdu.pjserver.dao.DailyReport;
 import com.fdu.pjserver.dao.StudentInfo;
@@ -163,43 +164,43 @@ public class DailyReportController {
      * @apiSuccess (响应结果) {Object} response
      * @apiSuccessExample 响应结果示例
      * {
-     *     "msg": "操作成功",
-     *     "code": 200,
-     *     "data": {
-     *         "not_report_users": [
-     *             {
-     *                 "userId": "20262010001",
-     *                 "userName": "张三",
-     *                 "pwd": "123",
-     *                 "status": 1,
-     *                 "createTime": "2020-12-22T01:30:51.000+08:00",
-     *                 "createBy": "System",
-     *                 "updateTime": "2020-12-22T01:30:51.000+08:00",
-     *                 "updateBy": "System",
-     *                 "mobile": "13800000000",
-     *                 "department": "软件学院",
-     *                 "degree": "研究生",
-     *                 "fullTime": 0,
-     *                 "counselorName": "李老师",
-     *                 "graduation": 1,
-     *                 "address": "上海市XX区XX路"
-     *             }
-     *         ],
-     *         "report": [
-     *             {
-     *                 "userId": "20262010002",
-     *                 "reportDate": "2020-12-01T00:00:00.000+08:00",
-     *                 "hasFever": 1,
-     *                 "atSchool": 1,
-     *                 "temperatureRange": 0,
-     *                 "hasCough": 1,
-     *                 "atIsolation": 1,
-     *                 "hasRiskContact": 1,
-     *                 "hasInfectedContact": 1,
-     *                 "userName": "李四"
-     *             }
-     *         ]
-     *     }
+     * "msg": "操作成功",
+     * "code": 200,
+     * "data": {
+     * "not_report_users": [
+     * {
+     * "userId": "20262010001",
+     * "userName": "张三",
+     * "pwd": "123",
+     * "status": 1,
+     * "createTime": "2020-12-22T01:30:51.000+08:00",
+     * "createBy": "System",
+     * "updateTime": "2020-12-22T01:30:51.000+08:00",
+     * "updateBy": "System",
+     * "mobile": "13800000000",
+     * "department": "软件学院",
+     * "degree": "研究生",
+     * "fullTime": 0,
+     * "counselorName": "李老师",
+     * "graduation": 1,
+     * "address": "上海市XX区XX路"
+     * }
+     * ],
+     * "report": [
+     * {
+     * "userId": "20262010002",
+     * "reportDate": "2020-12-01T00:00:00.000+08:00",
+     * "hasFever": 1,
+     * "atSchool": 1,
+     * "temperatureRange": 0,
+     * "hasCough": 1,
+     * "atIsolation": 1,
+     * "hasRiskContact": 1,
+     * "hasInfectedContact": 1,
+     * "userName": "李四"
+     * }
+     * ]
+     * }
      * }
      */
     @RequestMapping(value = "/get_reports_by_date", method = RequestMethod.POST)
@@ -218,9 +219,58 @@ public class DailyReportController {
         return AjaxResult.success(response);
     }
 
-    @RequestMapping(value = "/analysis", method = RequestMethod.POST)
-    public AjaxResult getReportsByDate(@RequestParam Date reportDate,
-                                       @RequestParam String type) {
+    /**
+     * @api {POST} /report/day_analysis analysisDay
+     * @apiVersion 1.0.0
+     * @apiGroup 疫情上报数据
+     * @apiName analysisDay
+     * @apiDescription 当日数据分析接口
+     * @apiParam (请求参数) {Number} reportDate
+     * @apiParam (请求参数) {String} type 取值区间on_time,at_school,temp,cough,isolation,risk_cont,infected_cont
+     * @apiParamExample 请求参数示例
+     * reportDate=2020/12/23&type=isolation
+     * @apiSuccess (响应结果) {Object} response data字段中一般为not_report_users,true,false三个字段，分别表示当日未上报、当前请求分析字段为1/0的数据。
+     * 如果type取值为temp，返回normal,mid,high三个字段表示体温的三个区间
+     * @apiSuccessExample 响应结果示例
+     * {
+     * "msg": "操作成功",
+     * "code": 200,
+     * "data": {
+     * "not_report_users": [],
+     * "true": [
+     * {
+     * "userId": "20262010002",
+     * "reportDate": "2020-12-23T00:00:00.000+08:00",
+     * "hasFever": 1,
+     * "atSchool": 1,
+     * "temperatureRange": 0,
+     * "hasCough": 1,
+     * "atIsolation": 1,
+     * "hasRiskContact": 1,
+     * "hasInfectedContact": 1,
+     * "userName": "李四"
+     * }
+     * ],
+     * "false": [
+     * {
+     * "userId": "20262010001",
+     * "reportDate": "2020-12-23T00:00:00.000+08:00",
+     * "hasFever": 0,
+     * "atSchool": 0,
+     * "temperatureRange": 1,
+     * "hasCough": 0,
+     * "atIsolation": 0,
+     * "hasRiskContact": 0,
+     * "hasInfectedContact": 0,
+     * "userName": "张三"
+     * }
+     * ]
+     * }
+     * }
+     */
+    @RequestMapping(value = "/day_analysis", method = RequestMethod.POST)
+    public AjaxResult analysisDay(@RequestParam Date reportDate,
+                                     @RequestParam String type) {
         // type: on_time,at_school,temp,cough,isolation,risk_cont,infected_cont
         List<UserDailyReport> dailyReports = dailyReportService.retrieveAllByDate(reportDate);
         Set<String> reportUserIds = dailyReports.stream().map(DailyReport::getUserId).collect(Collectors.toSet());
@@ -230,10 +280,182 @@ public class DailyReportController {
                 notReportStudents.add(studentInfo);
             }
         }
+        // 根据请求进行各维度数据解析
         HashMap<String, Object> response = new HashMap<>();
-        response.put("report", dailyReports);
         response.put("not_report_users", notReportStudents);
+        List<UserDailyReport> trueList = new ArrayList<>();
+        List<UserDailyReport> falseList = new ArrayList<>();
+        switch (type) {
+            case "on_time":
+                response.put("report", dailyReports);
+                break;
+            case "at_school":
+                for (UserDailyReport report : dailyReports) {
+                    if (report.getAtSchool() == 0) {
+                        falseList.add(report);
+                    } else {
+                        trueList.add(report);
+                    }
+                }
+                response.put("true", trueList);
+                response.put("false", falseList);
+                break;
+            case "cough":
+                for (UserDailyReport report : dailyReports) {
+                    if (report.getHasCough() == 0) {
+                        falseList.add(report);
+                    } else {
+                        trueList.add(report);
+                    }
+                }
+                response.put("true", trueList);
+                response.put("false", falseList);
+                break;
+            case "isolation":
+                for (UserDailyReport report : dailyReports) {
+                    if (report.getAtIsolation() == 0) {
+                        falseList.add(report);
+                    } else {
+                        trueList.add(report);
+                    }
+                }
+                response.put("true", trueList);
+                response.put("false", falseList);
+                break;
+            case "risk_cont":
+                for (UserDailyReport report : dailyReports) {
+                    if (report.getHasRiskContact() == 0) {
+                        falseList.add(report);
+                    } else {
+                        trueList.add(report);
+                    }
+                }
+                response.put("true", trueList);
+                response.put("false", falseList);
+                break;
+            case "infected_cont":
+                for (UserDailyReport report : dailyReports) {
+                    if (report.getHasInfectedContact() == 0) {
+                        falseList.add(report);
+                    } else {
+                        trueList.add(report);
+                    }
+                }
+                response.put("true", trueList);
+                response.put("false", falseList);
+                break;
+            case "temp":
+                //体温范围0:正常,1:37.3-38,2:38以上
+                List<UserDailyReport> normalList = new ArrayList<>();
+                List<UserDailyReport> midList = new ArrayList<>();
+                List<UserDailyReport> highList = new ArrayList<>();
+                for (UserDailyReport report : dailyReports) {
+                    if (report.getTemperatureRange() == 0) {
+                        normalList.add(report);
+                    } else if (report.getTemperatureRange() == 1) {
+                        midList.add(report);
+                    } else if (report.getTemperatureRange() == 2) {
+                        highList.add(report);
+                    }
+                }
+                response.put("normal", normalList);
+                response.put("mid", midList);
+                response.put("high", highList);
+                break;
+            default:
+                return AjaxResult.error("type参数错误");
+        }
+
+
         return AjaxResult.success(response);
+    }
+
+    /**
+     * @api {POST} /report/range_abnormal_analysis analysisDateRank
+     * @apiVersion 1.0.0
+     * @apiGroup 疫情上报数据
+     * @apiName analysisDateRank
+     * @apiDescription 日期区间内异常数据
+     * @apiParam (请求参数) {Number} oldDate 起始日
+     * @apiParam (请求参数) {Number} newDate 结束日
+     * @apiParam (请求参数) {String} type
+     * @apiParamExample 请求参数示例
+     * oldDate=2020/12/01&type=cough&newDate=2020/12/23
+     * @apiSuccess (响应结果) {Object} response 取值区间on_time,at_school,temp,cough,isolation,risk_cont,infected_cont
+     * @apiSuccessExample 响应结果示例
+     * {
+     *     "msg": "操作成功",
+     *     "code": 200,
+     *     "data": [
+     *         {
+     *             "2020-12-01": 1
+     *         },
+     *         {
+     *             "2020-12-23": 1
+     *         }
+     *     ]
+     * }
+     */
+    @RequestMapping(value = "/range_abnormal_analysis", method = RequestMethod.POST)
+    public AjaxResult analysisDateRank(@RequestParam Date oldDate,
+                                      @RequestParam Date newDate,
+                                      @RequestParam String type) {
+        // type: on_time,at_school,temp,cough,isolation,risk_cont,infected_cont
+        List<UserDailyReport> dailyReports = dailyReportService.retrieveAllBetweenDate(oldDate, newDate);
+        HashMap<String, Integer> responseMap = new HashMap<>();
+        for (UserDailyReport report : dailyReports) {
+            Date date = report.getReportDate();
+            String day = DateUtils.dateToDay(date);
+            if (!responseMap.containsKey(day)) {
+                responseMap.put(day, 0);
+            }
+            switch (type) {
+                case "on_time":
+                    if (date.getHours() > 17) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                case "at_school":
+                    if (report.getAtSchool() == 0) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                case "cough":
+                    if (report.getHasCough() == 1) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                case "isolation":
+                    if (report.getAtIsolation() == 1) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                case "risk_cont":
+                    if (report.getHasRiskContact() == 1) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                case "infected_cont":
+                    if (report.getHasInfectedContact() == 1) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                case "temp":
+                    //体温范围0:正常,1:37.3-38,2:38以上
+                    if (report.getTemperatureRange() > 0) {
+                        responseMap.put(day, responseMap.get(day) + 1);
+                    }
+                    break;
+                default:
+                    return AjaxResult.error("type参数错误");
+            }
+        }
+        List<Map.Entry<String, Integer>> result =
+                responseMap.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .collect(Collectors.toList());
+        return AjaxResult.success(result);
     }
 
 

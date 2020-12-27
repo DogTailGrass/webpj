@@ -127,4 +127,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
     }
+
+    public static String dateToDay(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
 }

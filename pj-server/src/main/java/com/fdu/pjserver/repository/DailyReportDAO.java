@@ -22,4 +22,9 @@ public interface DailyReportDAO extends JpaRepository<DailyReport, String>, JpaS
             "r.temperatureRange,r.hasCough,r.atIsolation,r.hasRiskContact,r.hasInfectedContact) " +
             "from DailyReport r left join User u on r.userId=u.userId where r.reportDate=?1")
     public List<UserDailyReport> findAllReportByDate(Date reportDate);
+
+    @Query(value = "select new com.fdu.pjserver.dao.UserDailyReport(r.userId,u.userName,r.reportDate,r.hasFever,r.atSchool," +
+            "r.temperatureRange,r.hasCough,r.atIsolation,r.hasRiskContact,r.hasInfectedContact) " +
+            "from DailyReport r left join User u on r.userId=u.userId where r.reportDate>=?1 and r.reportDate<=?2")
+    public List<UserDailyReport> findAllReportBetweenDate(Date date1, Date date2);
 }
